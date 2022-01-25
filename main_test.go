@@ -2,6 +2,9 @@ package main_test
 
 import (
 	"fmt"
+	"sort"
+	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -196,13 +199,12 @@ func TestLonelyInteger(t *testing.T) {
 	f := func(a []int32) int32 {
 		imap := make(map[int32]int32)
 		for _, i := range a {
-			v, ok := imap[i]
-			if !ok {
-				imap[i] = 1
+			if v, ok := imap[i]; ok {
+				imap[i] = v + 1
 				continue
 			}
 
-			imap[i] = v + 1
+			imap[i] = 1
 		}
 
 		for k, v := range imap {
@@ -310,5 +312,210 @@ func TestCountingSort(t *testing.T) {
 
 			t.Errorf("want=%v, got=%v", c.want, got)
 		}
+	}
+}
+
+func TestFindZigZagSequence(t *testing.T) {
+	// Not provided for Go
+}
+
+func TestTowerBreakers(t *testing.T) {
+	f := func(n, m int32) int32 {
+		return 0
+	}
+
+	cases := []struct {
+		n, m int32
+		want int32
+	}{
+		//	{2, 6, 2},
+	}
+
+	for _, c := range cases {
+		got := f(c.n, c.m)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestCaesarCipher(t *testing.T) {
+	f := func(s string, k int32) string {
+		const abc = "abcdefghijklmnopqrstuvwxyz"
+		const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+		var buf strings.Builder
+		for _, ss := range s {
+			if strings.Contains(abc, string(ss)) {
+				a := ss + k
+				for a > rune('z') {
+					a = a - 26
+				}
+
+				buf.WriteRune(a)
+				continue
+			}
+
+			if strings.Contains(ABC, string(ss)) {
+				a := ss + k
+				for a > rune('Z') {
+					a = a - 26
+				}
+
+				buf.WriteRune(a)
+				continue
+			}
+
+			buf.WriteRune(ss)
+		}
+
+		return buf.String()
+	}
+
+	cases := []struct {
+		in   string
+		k    int32
+		want string
+	}{
+		{"abc-z", 3, "def-c"},
+		{"ABC-Z", 3, "DEF-C"},
+		{"abc-zZ", 3, "def-cC"},
+		{"www.abc.xy", 87, "fff.jkl.gh"},
+	}
+
+	for _, c := range cases {
+		got := f(c.in, c.k)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestGridChallenge(t *testing.T) {
+	f := func(grid []string) string {
+		for i := range grid {
+			s := strings.Split(grid[i], "")
+			sort.Strings(s)
+			grid[i] = strings.Join(s, "")
+		}
+
+		for i := 0; i < len(grid); i++ {
+			for j := 1; j < len(grid[i]); j++ {
+				if grid[i][j] >= grid[i][j-1] {
+					continue
+				}
+
+				return "NO"
+			}
+		}
+
+		for j := 0; j < len(grid[0]); j++ {
+			for i := 1; i < len(grid); i++ {
+				if grid[i][j] >= grid[i-1][j] {
+					continue
+				}
+
+				return "NO"
+			}
+		}
+
+		return "YES"
+	}
+
+	cases := []struct {
+		in   []string
+		want string
+	}{
+		{
+			[]string{
+				"abc",
+				"ade",
+				"efg",
+			},
+			"YES",
+		},
+		{
+			[]string{
+				"eabcd",
+				"fghij",
+				"olkmn",
+				"trpqs",
+				"xywuv",
+			},
+			"YES",
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func superDigit(n string, k int32) int32 {
+	if len(n) == 1 && k == 1 {
+		v, _ := strconv.ParseInt(n, 10, 64)
+		return int32(v)
+	}
+
+	var sum int64
+	for i := range n {
+		v, _ := strconv.ParseInt(string(n[i]), 10, 64)
+		sum += v
+	}
+
+	s := strconv.FormatInt(sum*int64(k), 10)
+	return superDigit(s, 1)
+}
+
+func TestSuperDigit(t *testing.T) {
+	cases := []struct {
+		n    string
+		k    int32
+		want int32
+	}{
+		{"9875", 4, 8},
+	}
+
+	for _, c := range cases {
+		got := superDigit(c.n, c.k)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestMinimumBribes(t *testing.T) {
+	f := func(q []int32) string {
+		return ""
+	}
+
+	cases := []struct {
+		in   []int32
+		want string
+	}{
+		{[]int32{1, 2, 3, 5, 4, 6, 7, 8}, "1"},
+		{[]int32{4, 1, 2, 3}, "Too chaotic"},
+		{[]int32{2, 1, 5, 3, 4}, "3"},
+		{[]int32{2, 5, 1, 3, 4}, "Too chaotic"},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
