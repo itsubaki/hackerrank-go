@@ -90,6 +90,7 @@ func TestMiniMaxSum(t *testing.T) {
 
 				sum = sum + int64(a)
 			}
+
 			ans = append(ans, sum)
 		}
 
@@ -285,27 +286,9 @@ func TestDiagonalDifference(t *testing.T) {
 
 func TestCountingSort(t *testing.T) {
 	f := func(arr []int32) []int32 {
-		amap := make(map[int32]int32)
+		out := make([]int32, 100)
 		for i := range arr {
-			v, ok := amap[arr[i]]
-			if !ok {
-				amap[arr[i]] = 1
-				continue
-			}
-
-			amap[arr[i]] = v + 1
-		}
-
-		max := int32(100)
-		out := make([]int32, max)
-		for i := int32(0); i < max; i++ {
-			v, ok := amap[i]
-			if !ok {
-				out[i] = 0
-				continue
-			}
-
-			out[i] = v
+			out[arr[i]] += 1
 		}
 
 		return out
