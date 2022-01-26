@@ -32,7 +32,7 @@ func TestTemplate(t *testing.T) {
 
 func TestPlusMinus(t *testing.T) {
 	f := func(arr []int32) []string {
-		p, n, z := 0.0, 0.0, 0.0
+		var p, n, z float64
 		for i := range arr {
 			if arr[i] > 0 {
 				p++
@@ -44,13 +44,11 @@ func TestPlusMinus(t *testing.T) {
 		}
 
 		out := make([]string, 0)
-		out = append(out, fmt.Sprintf("%.6f", p/float64(len(arr))))
-		out = append(out, fmt.Sprintf("%.6f", n/float64(len(arr))))
-		out = append(out, fmt.Sprintf("%.6f", z/float64(len(arr))))
 
-		for _, o := range out {
-			fmt.Println(o)
-		}
+		s := float64(len(arr))
+		out = append(out, fmt.Sprintf("%.6f", p/s))
+		out = append(out, fmt.Sprintf("%.6f", n/s))
+		out = append(out, fmt.Sprintf("%.6f", z/s))
 
 		return out
 	}
@@ -112,7 +110,6 @@ func TestMiniMaxSum(t *testing.T) {
 		out = append(out, min)
 		out = append(out, max)
 
-		fmt.Printf("%v %v\n", out[0], out[1])
 		return out
 	}
 
@@ -321,14 +318,22 @@ func TestFindZigZagSequence(t *testing.T) {
 
 func TestTowerBreakers(t *testing.T) {
 	f := func(n, m int32) int32 {
-		return 0
+		if m == 1 {
+			return 2
+		}
+
+		if n%2 == 1 {
+			return 1
+		}
+
+		return 2
 	}
 
 	cases := []struct {
 		n, m int32
 		want int32
 	}{
-		//	{2, 6, 2},
+		{2, 6, 2},
 	}
 
 	for _, c := range cases {
@@ -347,9 +352,9 @@ func TestCaesarCipher(t *testing.T) {
 		const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 		var buf strings.Builder
-		for _, ss := range s {
-			if strings.Contains(abc, string(ss)) {
-				a := ss + k
+		for _, r := range s {
+			if strings.ContainsRune(abc, r) {
+				a := r + k
 				for a > rune('z') {
 					a = a - 26
 				}
@@ -358,8 +363,8 @@ func TestCaesarCipher(t *testing.T) {
 				continue
 			}
 
-			if strings.Contains(ABC, string(ss)) {
-				a := ss + k
+			if strings.ContainsRune(ABC, r) {
+				a := r + k
 				for a > rune('Z') {
 					a = a - 26
 				}
@@ -368,7 +373,7 @@ func TestCaesarCipher(t *testing.T) {
 				continue
 			}
 
-			buf.WriteRune(ss)
+			buf.WriteRune(r)
 		}
 
 		return buf.String()
@@ -497,7 +502,25 @@ func TestSuperDigit(t *testing.T) {
 
 func TestMinimumBribes(t *testing.T) {
 	f := func(q []int32) string {
-		return ""
+		var sum int32
+		for i := len(q) - 1; i > -1; i-- {
+			if q[i]-int32(i+1) > 2 {
+				return "Too chaotic"
+			}
+
+			var max int32
+			if q[i]-2 > max {
+				max = q[i] - 2
+			}
+
+			for j := max; j < int32(i); j++ {
+				if q[j] > q[i] {
+					sum++
+				}
+			}
+		}
+
+		return strconv.FormatInt(int64(sum), 10)
 	}
 
 	cases := []struct {
@@ -508,6 +531,80 @@ func TestMinimumBribes(t *testing.T) {
 		{[]int32{4, 1, 2, 3}, "Too chaotic"},
 		{[]int32{2, 1, 5, 3, 4}, "3"},
 		{[]int32{2, 5, 1, 3, 4}, "Too chaotic"},
+		{[]int32{1, 2, 5, 3, 7, 8, 6, 4}, "7"},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestMergeLists(t *testing.T) {
+	// Not provided for Go
+}
+
+func TestQueueUsingTwoStacks(t *testing.T) {
+	// https://github.com/itsubaki/cracking-the-coding-interview/blob/main/03_stacks_and_queues_test.go#L59
+}
+
+func TestIsBalanced(t *testing.T) {
+	f := func(s string) string {
+		if len(s)%2 != 0 {
+			return "NO"
+		}
+
+		q := make([]rune, 0)
+		for _, r := range s {
+			if strings.ContainsRune("{[(", r) {
+				q = append(q, r)
+				continue
+			}
+
+			// r is ")]}"
+			if len(q) == 0 {
+				return "NO"
+			}
+
+			var bra rune
+			switch r {
+			case ')':
+				bra = '('
+			case '}':
+				bra = '{'
+			case ']':
+				bra = '['
+			}
+
+			if q[len(q)-1] != bra {
+				return "NO"
+			}
+
+			q = q[:len(q)-1] // pop
+		}
+
+		if len(q) != 0 {
+			return "NO"
+		}
+
+		return "YES"
+	}
+
+	cases := []struct {
+		in   string
+		want string
+	}{
+		{"{[()]}", "YES"},
+		{"{[(])}", "NO"},
+		{"([[)", "NO"},
+		{"}][}}(}][))]", "NO"},
+		{"[](){()}", "YES"},
+		{"({}([][]))[]()", "YES"},
+		{"{)[](}]}]}))}(())(", "NO"},
 	}
 
 	for _, c := range cases {
