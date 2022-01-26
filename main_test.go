@@ -642,22 +642,6 @@ func TestSimpleTextEditor(t *testing.T) {
 		return out
 	}
 
-	// var q int
-	// fmt.Scan(&q)
-
-	// var sc = bufio.NewScanner(os.Stdin)
-	// var ops []string
-	// for i := 0; i < q; i++ {
-	// 	if sc.Scan() {
-	// 		ops = append(ops, sc.Text())
-	// 	}
-	// }
-
-	// out := f("", ops)
-	// for _, o := range out {
-	// 	fmt.Println(o)
-	// }
-
 	cases := []struct {
 		s    string
 		ops  []string
@@ -680,6 +664,24 @@ func TestSimpleTextEditor(t *testing.T) {
 			t.Errorf("want=%v, got=%v", c.want, got)
 		}
 	}
+
+	// func main() {
+	// 	var q int
+	// 	fmt.Scan(&q)
+
+	// 	var sc = bufio.NewScanner(os.Stdin)
+	// 	var ops []string
+	// 	for i := 0; i < q; i++ {
+	// 		if sc.Scan() {
+	// 			ops = append(ops, sc.Text())
+	// 		}
+	// 	}
+
+	// 	out := f("", ops)
+	// 	for _, o := range out {
+	// 		fmt.Println(o)
+	// 	}
+	// }
 }
 
 func TestLegoBlocks(t *testing.T) {
