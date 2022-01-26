@@ -42,10 +42,9 @@ func TestPlusMinus(t *testing.T) {
 				z++
 			}
 		}
+		s := float64(len(arr))
 
 		out := make([]string, 0)
-
-		s := float64(len(arr))
 		out = append(out, fmt.Sprintf("%.6f", p/s))
 		out = append(out, fmt.Sprintf("%.6f", n/s))
 		out = append(out, fmt.Sprintf("%.6f", z/s))
