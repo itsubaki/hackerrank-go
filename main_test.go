@@ -615,3 +615,53 @@ func TestIsBalanced(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestSimpleTextEditor(t *testing.T) {
+	f := func(s string, ops []string) []string {
+		out := make([]string, 0)
+
+		var prev string
+		for _, o := range ops {
+			sp := strings.Split(o, " ")
+			switch sp[0] {
+			case "1":
+				prev = s
+				s = strings.Join([]string{s, sp[1]}, "")
+			case "2":
+				prev = s
+				k, _ := strconv.Atoi(sp[1])
+				s = s[:len(s)-k]
+			case "3":
+				k, _ := strconv.Atoi(sp[1])
+				out = append(out, string(s[k-1]))
+			case "4":
+				s = prev
+			}
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		s    string
+		ops  []string
+		want []string
+	}{
+		{
+			"abcde",
+			[]string{"1 fg", "3 6", "2 5", "4", "3 7", "4", "3 4"},
+			[]string{"f", "g", "d"},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.s, c.ops)
+		for i := range c.want {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+}
