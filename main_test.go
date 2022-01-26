@@ -681,3 +681,28 @@ func TestSimpleTextEditor(t *testing.T) {
 		}
 	}
 }
+
+func TestLegoBlocks(t *testing.T) {
+	f := func(n, m int32) int32 {
+		return 0
+	}
+
+	cases := []struct {
+		n, m int32
+		want int32
+	}{
+		{2, 2, 3},
+		{3, 2, 7},
+		{2, 3, 9},
+		{4, 4, 3375},
+	}
+
+	for _, c := range cases {
+		got := f(c.n, c.m)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
