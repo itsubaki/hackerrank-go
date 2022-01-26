@@ -619,28 +619,44 @@ func TestIsBalanced(t *testing.T) {
 func TestSimpleTextEditor(t *testing.T) {
 	f := func(s string, ops []string) []string {
 		out := make([]string, 0)
-
-		var prev string
+		prev := make([]string, 0)
 		for _, o := range ops {
 			sp := strings.Split(o, " ")
 			switch sp[0] {
 			case "1":
-				prev = s
+				prev = append(prev, s)
 				s = strings.Join([]string{s, sp[1]}, "")
 			case "2":
-				prev = s
+				prev = append(prev, s)
 				k, _ := strconv.Atoi(sp[1])
 				s = s[:len(s)-k]
 			case "3":
 				k, _ := strconv.Atoi(sp[1])
 				out = append(out, string(s[k-1]))
 			case "4":
-				s = prev
+				s = prev[len(prev)-1]
+				prev = prev[:len(prev)-1]
 			}
 		}
 
 		return out
 	}
+
+	// var q int
+	// fmt.Scan(&q)
+
+	// var sc = bufio.NewScanner(os.Stdin)
+	// var ops []string
+	// for i := 0; i < q; i++ {
+	// 	if sc.Scan() {
+	// 		ops = append(ops, sc.Text())
+	// 	}
+	// }
+
+	// out := f("", ops)
+	// for _, o := range out {
+	// 	fmt.Println(o)
+	// }
 
 	cases := []struct {
 		s    string
