@@ -839,7 +839,6 @@ func TestSimpleTextEditor(t *testing.T) {
 	// func main() {
 	// 	var q int
 	// 	fmt.Scan(&q)
-
 	// 	var sc = bufio.NewScanner(os.Stdin)
 	// 	var ops []string
 	// 	for i := 0; i < q; i++ {
@@ -847,7 +846,6 @@ func TestSimpleTextEditor(t *testing.T) {
 	// 			ops = append(ops, sc.Text())
 	// 		}
 	// 	}
-
 	// 	out := f("", ops)
 	// 	for _, o := range out {
 	// 		fmt.Println(o)
