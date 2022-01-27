@@ -1,7 +1,10 @@
 package main_test
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -544,8 +547,179 @@ func TestMergeLists(t *testing.T) {
 	// Not provided for Go
 }
 
+type stack struct {
+	values []string
+}
+
+func (s *stack) Push(v string) {
+	s.values = append(s.values, v)
+}
+
+func (s *stack) Pop() string {
+	ret := s.values[len(s.values)-1]
+	s.values = s.values[:len(s.values)-1]
+	return ret
+}
+
+func (s *stack) Top() string {
+	return s.values[len(s.values)-1]
+}
+
+func (s *stack) IsEmpty() bool {
+	return len(s.values) == 0
+}
+
+type queue struct {
+	in  *stack
+	out *stack
+}
+
+func (q *queue) Enq(s string) {
+	q.in.Push(s)
+}
+
+func (q *queue) Deq() string {
+	if q.out.IsEmpty() {
+		q.shift()
+	}
+
+	return q.out.Pop()
+}
+
+func (q *queue) Front() string {
+	if q.out.IsEmpty() {
+		q.shift()
+	}
+
+	return q.out.Top()
+}
+
+func (q *queue) shift() {
+	for {
+		if q.in.IsEmpty() {
+			break
+		}
+
+		v := q.in.Pop()
+		q.out.Push(v)
+	}
+}
+
 func TestQueueUsingTwoStacks(t *testing.T) {
-	// https://github.com/itsubaki/cracking-the-coding-interview/blob/main/03_stacks_and_queues_test.go#L59
+	f := func(ops []string) []string {
+		q := &queue{
+			in:  &stack{values: make([]string, 0)},
+			out: &stack{values: make([]string, 0)},
+		}
+
+		out := make([]string, 0)
+		for _, o := range ops {
+			sp := strings.Split(o, " ")
+			switch sp[0] {
+			case "1":
+				q.Enq(sp[1])
+			case "2":
+				q.Deq()
+			case "3":
+				out = append(out, q.Front())
+			}
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		in   []string
+		want []string
+	}{
+		{
+			[]string{
+				"1 42",
+				"2",
+				"1 14",
+				"3",
+				"1 28",
+				"3",
+				"1 60",
+				"1 78",
+				"2",
+				"2",
+			},
+			[]string{"14", "14"},
+		},
+		{
+			[]string{
+				"1 92118642",
+				"2",
+				"1 107858633",
+				"1 110186788",
+				"1 883309178",
+				"1 430939631",
+				"2",
+				"1 739711408",
+				"1 803703507",
+				"1 643797161",
+				"1 538560826",
+				"3",
+				"1 595864615",
+				"1 490282285",
+				"1 558095366",
+				"1 893666727",
+				"1 595679828",
+				"3",
+			},
+			[]string{"110186788", "110186788"},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+
+	{
+		read := func(reader *bufio.Reader) string {
+			str, _, err := reader.ReadLine()
+			if err == io.EOF {
+				return ""
+			}
+
+			return strings.TrimRight(string(str), "\r\n")
+		}
+
+		stdout, _ := os.Create(os.Getenv("OUTPUT_PATH"))
+		defer stdout.Close()
+
+		r := bufio.NewReaderSize(os.Stdin, 16*1024*1024)
+		w := bufio.NewWriterSize(stdout, 16*1024*1024)
+		n, _ := strconv.ParseInt(strings.TrimSpace(read(r)), 10, 64)
+
+		q := &queue{
+			in:  &stack{values: make([]string, 0)},
+			out: &stack{values: make([]string, 0)},
+		}
+
+		for i := int64(0); i < n; i++ {
+			s := strings.Split(strings.TrimSpace(read(r)), " ")
+
+			switch s[0] {
+			case "1":
+				q.Enq(s[1])
+			case "2":
+				q.Deq()
+			case "3":
+				fmt.Fprintf(w, "%s\n", q.Front())
+			}
+		}
+
+		w.Flush()
+	}
 }
 
 func TestIsBalanced(t *testing.T) {
