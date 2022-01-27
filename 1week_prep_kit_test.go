@@ -347,12 +347,9 @@ func TestTowerBreakers(t *testing.T) {
 
 func TestCaesarCipher(t *testing.T) {
 	f := func(s string, k int32) string {
-		const abc = "abcdefghijklmnopqrstuvwxyz"
-		const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
 		var buf strings.Builder
 		for _, r := range s {
-			if strings.ContainsRune(abc, r) {
+			if r >= 'a' && r <= 'z' {
 				a := r + k
 				for a > rune('z') {
 					a = a - 26
@@ -362,7 +359,7 @@ func TestCaesarCipher(t *testing.T) {
 				continue
 			}
 
-			if strings.ContainsRune(ABC, r) {
+			if r >= 'A' && r <= 'Z' {
 				a := r + k
 				for a > rune('Z') {
 					a = a - 26
