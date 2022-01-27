@@ -11,8 +11,11 @@ import (
 func TestHelloWorld(t *testing.T) {
 	f := func(r io.Reader) string {
 		var sc = bufio.NewScanner(r)
-		sc.Scan()
-		in := sc.Text()
+
+		var in string
+		if sc.Scan() {
+			in = sc.Text()
+		}
 
 		return fmt.Sprintf("Hello, World.\n%v", in)
 	}

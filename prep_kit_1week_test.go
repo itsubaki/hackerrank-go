@@ -879,3 +879,40 @@ func TestLegoBlocks(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestJesseAndCookies(t *testing.T) {
+	// Time limit exceeded
+	f := func(k int32, A []int32) int32 {
+		var count int32
+		for {
+			if len(A) == 1 {
+				return -1
+			}
+
+			sort.Slice(A, func(i, j int) bool { return A[i] < A[j] })
+			if A[0] >= k {
+				return count
+			}
+
+			A = append(A[2:], A[0]+A[1]*2)
+			count++
+		}
+	}
+
+	cases := []struct {
+		k    int32
+		A    []int32
+		want int32
+	}{
+		{7, []int32{1, 2, 3, 9, 10, 12}, 2},
+	}
+
+	for _, c := range cases {
+		got := f(c.k, c.A)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
