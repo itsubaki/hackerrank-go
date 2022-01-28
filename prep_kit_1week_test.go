@@ -2,6 +2,7 @@ package main_test
 
 import (
 	"bufio"
+	"container/heap"
 	"fmt"
 	"io"
 	"os"
@@ -97,7 +98,7 @@ func TestMiniMaxSum(t *testing.T) {
 			ans = append(ans, sum)
 		}
 
-		min, max := int64(10000000000), int64(0)
+		min, max := int64(1<<63-1), int64(-1<<63)
 		for i := range ans {
 			if ans[i] > max {
 				max = ans[i]
@@ -878,23 +879,52 @@ func TestLegoBlocks(t *testing.T) {
 	}
 }
 
+// https://pkg.go.dev/container/heap
+type int32Heap []int32
+
+func (h int32Heap) Len() int            { return len(h) }
+func (h int32Heap) Less(i, j int) bool  { return h[i] < h[j] }
+func (h int32Heap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
+func (h *int32Heap) Push(x interface{}) { *h = append(*h, x.(int32)) }
+func (h *int32Heap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
 func TestJesseAndCookies(t *testing.T) {
-	// Time limit exceeded
 	f := func(k int32, A []int32) int32 {
+		h := &int32Heap{}
+		heap.Init(h)
+
+		for i := range A {
+			heap.Push(h, A[i])
+		}
+
 		var count int32
 		for {
-			if len(A) == 1 {
-				return -1
-			}
-
-			sort.Slice(A, func(i, j int) bool { return A[i] < A[j] })
-			if A[0] >= k {
+			v0 := heap.Pop(h)
+			if v0.(int32) >= k {
 				return count
 			}
 
-			A = append(A[2:], A[0]+A[1]*2)
+			if h.Len() == 0 {
+				return -1
+			}
+
+			v1 := heap.Pop(h)
+			heap.Push(h, v0.(int32)+v1.(int32)*2)
+
 			count++
 		}
+	}
+
+	n := 100000
+	testA := make([]int32, n)
+	for i := 0; i < n; i++ {
+		testA[i] = 1
 	}
 
 	cases := []struct {
@@ -903,6 +933,7 @@ func TestJesseAndCookies(t *testing.T) {
 		want int32
 	}{
 		{7, []int32{1, 2, 3, 9, 10, 12}, 2},
+		{105823341, testA, 99999},
 	}
 
 	for _, c := range cases {
@@ -912,5 +943,53 @@ func TestJesseAndCookies(t *testing.T) {
 		}
 
 		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestTreePreorderTraversal(t *testing.T) {
+	// Not provided for Go
+}
+
+func TestTreeHuffmanDecoding(t *testing.T) {
+	// Not provided for Go
+}
+
+func TestNoPrefix(t *testing.T) {
+	// Use trie tree to reduce complexity
+	f := func(words []string) []string {
+		return words
+	}
+
+	cases := []struct {
+		in   []string
+		want []string
+	}{
+		{
+			[]string{"abcd", "bcd", "abcde", "bcde"},
+			[]string{"BAD SET", "abcde"},
+		},
+		{
+			[]string{"ab", "bc", "cd"},
+			[]string{"GOOD SET"},
+		},
+		{
+			[]string{"aab", "defgab", "abcde", "aabcde", "cedaaa", "bbbbbbbbbb", "jabjjjad"},
+			[]string{"BAD SET", "aabcde"},
+		},
+		{
+			[]string{"aab", "aac", "aacghgh", "aabghgh"},
+			[]string{"BAD SET", "aacghgh"},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range c.want {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
 	}
 }
