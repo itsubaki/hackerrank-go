@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"math"
 	"strconv"
 	"strings"
 	"testing"
@@ -84,6 +85,30 @@ func TestDataTypes(t *testing.T) {
 }
 
 func TestOperators(t *testing.T) {
+	f := func(meal_cost float64, tip_percent int32, tax_percent int32) int32 {
+		tip := meal_cost * float64(tip_percent) / 100.0
+		tax := meal_cost * float64(tax_percent) / 100.0
+		ret := math.Round(meal_cost + tip + tax)
+		return int32(ret)
+	}
+
+	cases := []struct {
+		cost     float64
+		tip, tax int32
+		want     int32
+	}{}
+
+	for _, c := range cases {
+		got := f(c.cost, c.tip, c.tax)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestIntroToConditionalStatements(t *testing.T) {
 	f := func(s string) string {
 		return s
 	}
