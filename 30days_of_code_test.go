@@ -108,16 +108,28 @@ func TestOperators(t *testing.T) {
 	}
 }
 
-func TestIntroToConditionalStatements(t *testing.T) {
-	f := func(s string) string {
-		return s
+func TestConditionalStatements(t *testing.T) {
+	f := func(n int32) string {
+		if n%2 == 1 {
+			return "Weird"
+		}
+
+		if n >= 2 && n <= 5 {
+			return "Not Weird"
+		}
+
+		if n >= 6 && n <= 20 {
+			return "Weird"
+		}
+
+		return "Not Weird"
 	}
 
 	cases := []struct {
-		in   string
+		in   int32
 		want string
 	}{
-		{"foo", "foo"},
+		{3, "Weird"},
 	}
 
 	for _, c := range cases {
