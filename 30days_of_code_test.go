@@ -141,3 +141,58 @@ func TestConditionalStatements(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+// func TestClassVsInstance(t *testing.T) {}
+type person struct {
+	age int
+}
+
+func (p person) NewPerson(initialAge int) person {
+	if initialAge < 0 {
+		fmt.Println("Age is not valid, setting age to 0.")
+		initialAge = 0
+	}
+
+	return person{age: initialAge}
+}
+
+func (p person) amIOld() {
+	if p.age < 13 {
+		fmt.Println("You are young.")
+		return
+	}
+
+	if p.age < 18 {
+		fmt.Println("You are a teenager.")
+		return
+	}
+
+	fmt.Println("You are old.")
+}
+
+func (p person) yearPasses() person {
+	p.age++
+	return p
+}
+
+func TestLoop(t *testing.T) {
+	f := func(s string) string {
+		return s
+	}
+
+	cases := []struct {
+		in   string
+		want string
+	}{
+		{"foo", "foo"},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
