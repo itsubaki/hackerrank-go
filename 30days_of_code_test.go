@@ -175,24 +175,46 @@ func (p person) yearPasses() person {
 	return p
 }
 
-func TestLoop(t *testing.T) {
-	f := func(s string) string {
-		return s
+func TestLoops(t *testing.T) {
+	f := func(n int32) []string {
+		out := make([]string, 0)
+
+		for i := 1; i < 11; i++ {
+			out = append(out, fmt.Sprintf("%v x %v = %v", n, i, n*int32(i)))
+		}
+
+		return out
 	}
 
 	cases := []struct {
-		in   string
-		want string
+		in   int32
+		want []string
 	}{
-		{"foo", "foo"},
+		{
+			3,
+			[]string{
+				"3 x 1 = 3",
+				"3 x 2 = 6",
+				"3 x 3 = 9",
+				"3 x 4 = 12",
+				"3 x 5 = 15",
+				"3 x 6 = 18",
+				"3 x 7 = 21",
+				"3 x 8 = 24",
+				"3 x 9 = 27",
+				"3 x 10 = 30",
+			},
+		},
 	}
 
 	for _, c := range cases {
 		got := f(c.in)
-		if got == c.want {
-			continue
-		}
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
 
-		t.Errorf("want=%v, got=%v", c.want, got)
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
 	}
 }
