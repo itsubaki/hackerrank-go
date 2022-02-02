@@ -21,6 +21,7 @@ func TestHelloWorld(t *testing.T) {
 
 		return fmt.Sprintf("Hello, World.\n%v", in)
 	}
+	// fmt.Println(f(os.Stdin))
 
 	cases := []struct {
 		in   io.Reader
@@ -40,8 +41,6 @@ func TestHelloWorld(t *testing.T) {
 
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
-
-	// fmt.Println(f(os.Stdin))
 }
 
 func TestDataTypes(t *testing.T) {
@@ -217,4 +216,63 @@ func TestLoops(t *testing.T) {
 			t.Errorf("want=%v, got=%v", c.want, got)
 		}
 	}
+}
+
+func TestLetsReview(t *testing.T) {
+	f := func(r io.Reader) []string {
+		var sc = bufio.NewScanner(r)
+
+		sc.Scan()
+		n, _ := strconv.ParseInt(sc.Text(), 10, 64)
+
+		out := make([]string, 0)
+		for i := int64(0); i < n; i++ {
+			sc.Scan()
+			str := sc.Text()
+
+			var odd, even string
+			for i := range str {
+				if i%2 == 0 {
+					even = even + string(str[i])
+					continue
+				}
+
+				odd = odd + string(str[i])
+			}
+
+			out = append(out, fmt.Sprintf("%v %v", even, odd))
+		}
+
+		return out
+	}
+
+	// for _, o := range f(os.Stdin) {
+	// 	fmt.Println(o)
+	// }
+
+	cases := []struct {
+		in   io.Reader
+		want []string
+	}{
+		{
+			strings.NewReader("1\nadbecf"),
+			[]string{"abc def"},
+		},
+		{
+			strings.NewReader("2\nHacker\nRank\n"),
+			[]string{"Hce akr", "Rn ak"},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range c.want {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+
 }
