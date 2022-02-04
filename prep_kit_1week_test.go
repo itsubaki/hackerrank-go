@@ -954,7 +954,12 @@ func TestTreeHuffmanDecoding(t *testing.T) {
 	// Not provided for Go
 }
 
-func TestNoPrefix(t *testing.T) {
+type trienode struct {
+	key      string
+	children map[rune]*trienode
+}
+
+func TestNoPrefixSet(t *testing.T) {
 	// Use trie tree to reduce complexity
 	f := func(words []string) []string {
 		return words

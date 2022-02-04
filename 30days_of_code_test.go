@@ -21,7 +21,6 @@ func TestHelloWorld(t *testing.T) {
 
 		return fmt.Sprintf("Hello, World.\n%v", in)
 	}
-	// fmt.Println(f(os.Stdin))
 
 	cases := []struct {
 		in   io.Reader
@@ -246,10 +245,6 @@ func TestLetsReview(t *testing.T) {
 		return out
 	}
 
-	// for _, o := range f(os.Stdin) {
-	// 	fmt.Println(o)
-	// }
-
 	cases := []struct {
 		in   io.Reader
 		want []string
@@ -275,4 +270,77 @@ func TestLetsReview(t *testing.T) {
 		}
 	}
 
+}
+
+func TestArrays(t *testing.T) {
+	f := func(arr []int32) []int32 {
+		l := len(arr) - 1
+		for i := 0; i < len(arr)/2; i++ {
+			arr[i], arr[l-i] = arr[l-i], arr[i]
+		}
+
+		return arr
+	}
+
+	cases := []struct {
+		in   []int32
+		want []int32
+	}{
+		{[]int32{1, 4, 3, 2}, []int32{2, 3, 4, 1}},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range c.want {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+}
+
+func TestDictionariesAndMaps(t *testing.T) {
+	f := func(r []string, k []string) []string {
+		dic := make(map[string]string)
+		for i := range r {
+			v := strings.Split(r[i], " ")
+			dic[v[0]] = v[1]
+		}
+
+		out := make([]string, 0)
+		for i := range k {
+			if v, ok := dic[k[i]]; ok {
+				out = append(out, fmt.Sprintf("%v=%v", k[i], v))
+				continue
+			}
+
+			out = append(out, "Not found")
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		r, k []string
+		want []string
+	}{
+		{
+			[]string{"sam 99912222", "tom 11122222", "harry 12299933"},
+			[]string{"sam", "edward", "harry"},
+			[]string{"sam=99912222", "Not found", "harry=12299933"},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.r, c.k)
+		for i := range c.want {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
 }
