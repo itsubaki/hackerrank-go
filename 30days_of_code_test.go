@@ -344,3 +344,29 @@ func TestDictionariesAndMaps(t *testing.T) {
 		}
 	}
 }
+
+func factorial(n int32) int32 {
+	if n < 2 {
+		return 1
+	}
+
+	return factorial(n-1) * n
+}
+
+func TestRecursion3(t *testing.T) {
+	cases := []struct {
+		in   int32
+		want int32
+	}{
+		{3, 3 * 2 * 1},
+	}
+
+	for _, c := range cases {
+		got := factorial(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
