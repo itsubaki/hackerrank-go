@@ -415,3 +415,45 @@ func TestBinaryNumbers(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func Test2DArrays(t *testing.T) {
+	f := func(A [][]int32) int32 {
+		if len(A) != 6 {
+			panic("invalid array length")
+		}
+
+		if len(A[0]) != 6 {
+			panic("invalid array length")
+		}
+
+		max := int32(-1 << 31)
+		for i := 0; i < 4; i++ {
+			for j := 0; j < 4; j++ {
+				a := A[i][j] + A[i][j+1] + A[i][j+2]
+				b := A[i+1][j+1]
+				c := A[i+2][j] + A[i+2][j+1] + A[i+2][j+2]
+
+				sum := a + b + c
+				if sum > max {
+					max = sum
+				}
+			}
+		}
+
+		return max
+	}
+
+	cases := []struct {
+		in   [][]int32
+		want int32
+	}{}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
