@@ -370,3 +370,48 @@ func TestRecursion3(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestBinaryNumbers(t *testing.T) {
+	f := func(i int32) int32 {
+		s := strconv.FormatInt(int64(i), 2)
+		fmt.Println(s)
+
+		var max, count int32
+		for _, r := range s {
+			if r == '1' {
+				count++
+				continue
+			}
+
+			if count > max {
+				max = count
+			}
+
+			count = 0
+		}
+
+		if count > max {
+			max = count
+		}
+
+		return max
+	}
+
+	cases := []struct {
+		in   int32
+		want int32
+	}{
+		{5, 1},
+		{13, 2},
+		{65535, 16},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
