@@ -469,3 +469,68 @@ func Test2DArrays(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestInheritance(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java 8
+	// class Student extends Person{
+	// 	private int[] testScores;
+	//
+	// 	Student(String first, String last, int id, int [] s){
+	// 		super(first, last, id);
+	// 		this.testScores=s;
+	// 	}
+	//
+	// 	public String calculate() {
+	// 		int sum =0;
+	// 		for(int i : this.testScores) {
+	// 			sum+=i;
+	// 		}
+	//
+	// 		double avg= sum/testScores.length;
+	// 		if (avg<=100 && avg>=90) {
+	// 			return "O";
+	// 		}
+	//
+	// 		if(avg<90 && avg>=80) {
+	// 			 return "E";
+	// 		}
+	//
+	// 		if(avg<80 && avg>=70) {
+	// 			 return "A";
+	// 		}
+	//
+	// 		if(avg<70 && avg>=55) {
+	// 			 return "P";
+	// 		}
+	//
+	// 		if(avg<55 && avg>=40) {
+	// 			 return "D";
+	// 		}
+	//
+	// 		return "T";
+	// 	}
+	// }
+}
+
+func TestAbstractClasses(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java 8
+	// class MyBook extends Book {
+	//     int price;
+	//
+	//     MyBook(String title, String author, int price){
+	//         super(title, author);
+	//         this.price = price;
+	//     }
+	//
+	//     @Override
+	//     void display(){
+	//         System.out.println("Title: " + title);
+	//         System.out.println("Author: " + author);
+	//         System.out.println("Price: " + price);
+	//     }
+	// }
+}
