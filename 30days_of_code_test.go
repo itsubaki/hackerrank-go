@@ -475,7 +475,7 @@ func TestInheritance(t *testing.T) {
 	//
 	// Java 8
 	// class Student extends Person{
-	// 	private int[] testScores;
+	// 		private int[] testScores;
 	//
 	// 	Student(String first, String last, int id, int [] s){
 	// 		super(first, last, id);
@@ -519,18 +519,69 @@ func TestAbstractClasses(t *testing.T) {
 	//
 	// Java 8
 	// class MyBook extends Book {
-	//     int price;
+	//		int price;
 	//
-	//     MyBook(String title, String author, int price){
-	//         super(title, author);
-	//         this.price = price;
-	//     }
+	// 		MyBook(String title, String author, int price){
+	// 			super(title, author);
+	// 			this.price = price;
+	// 		}
 	//
-	//     @Override
-	//     void display(){
-	//         System.out.println("Title: " + title);
-	//         System.out.println("Author: " + author);
-	//         System.out.println("Price: " + price);
-	//     }
+	// 		@Override
+	// 		void display(){
+	// 			System.out.println("Title: " + title);
+	// 			System.out.println("Author: " + author);
+	// 			System.out.println("Price: " + price);
+	// 		}
+	// }
+}
+
+func TestScope(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// class Difference {
+	// 		private int[] elements;
+	// 		public int maximumDifference;
+	//
+	// 		public Difference(int[] nums) {
+	// 			elements = nums;
+	// 		}
+	//
+	// 		public void computeDifference() {
+	// 			Arrays.sort(elements);
+	// 			maximumDifference = elements[elements.length - 1] - elements[0];
+	// 		}
+	// }
+}
+
+func TestLinkedList(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// public static Node insert(Node head,int data) {
+	// 		if(head == null){
+	// 			return new Node(data);
+	// 		}
+	//
+	// 		Node n = head;
+	// 		while(n.next != null){
+	// 			n = n.next;
+	// 		}
+	// 		n.next = new Node(data);
+	//
+	// 		return head;
+	// }
+}
+
+func TestExceptions(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// String S = bufferedReader.readLine();
+	// try {
+	// 		int input = Integer.parseInt(S);
+	// 		System.out.println(input);
+	// } catch(Exception e) {
+	// 		System.out.println("Bad String");
 	// }
 }
