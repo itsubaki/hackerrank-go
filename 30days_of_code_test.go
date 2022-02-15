@@ -600,3 +600,48 @@ func TestMoreExceptions(t *testing.T) {
 	// 	}
 	// }
 }
+
+func TestQueuesAndStacks(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// LinkedList<Character> queue = new LinkedList();
+	// LinkedList<Character> stack = new LinkedList();
+	//
+	// public void pushCharacter(char ch) {
+	// 	stack.push(ch);
+	// }
+	//
+	// public void enqueueCharacter(char ch) {
+	// 	queue.add(ch);
+	// }
+	//
+	// public char popCharacter() {
+	// 	return stack.pop();
+	// }
+	//
+	// public char dequeueCharacter() {
+	// 	return queue.remove();
+	// }
+}
+
+func TestInterfaces(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// public int divisorSum(int n) {
+	// 	if(n == 1){
+	// 		return 1;
+	// 	}
+	//
+	// 	int half = n/2;
+	// 	int sum = n;
+	// 	do {
+	// 		if(n % half == 0){
+	// 			sum +=half;
+	// 		}
+	// 	} while( half-- > 1 );
+	//
+	// 	return sum;
+	// }
+}
