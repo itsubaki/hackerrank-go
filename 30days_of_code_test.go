@@ -645,3 +645,39 @@ func TestInterfaces(t *testing.T) {
 	// 	return sum;
 	// }
 }
+
+func TestSorting(t *testing.T) {
+	f := func(a []int32) (int32, int32, int32) {
+		var swaps int32
+		for i := 0; i < len(a)-1; i++ {
+			for j := 0; j < len(a)-i-1; j++ {
+				if a[j] > a[j+1] {
+					a[j], a[j+1] = a[j+1], a[j]
+					swaps++
+				}
+			}
+		}
+
+		return swaps, a[0], a[len(a)-1]
+	}
+
+	cases := []struct {
+		in                 []int32
+		swaps, first, last int32
+	}{
+		{[]int32{3, 2, 1}, 3, 1, 3},
+	}
+
+	for _, c := range cases {
+		s, f, l := f(c.in)
+		if s != c.swaps {
+			t.Errorf("want=%v, got=%v", c.swaps, s)
+		}
+		if f != c.first {
+			t.Errorf("want=%v, got=%v", c.swaps, s)
+		}
+		if l != c.last {
+			t.Errorf("want=%v, got=%v", c.swaps, s)
+		}
+	}
+}
