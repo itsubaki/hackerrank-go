@@ -681,3 +681,14 @@ func TestSorting(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerics(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// public <T> void printArray(T[] a) {
+	// 	for (T e : a) {
+	// 		System.out.println(e);
+	// 	}
+	// }
+}
