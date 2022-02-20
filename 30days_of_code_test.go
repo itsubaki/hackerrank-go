@@ -692,3 +692,53 @@ func TestGenerics(t *testing.T) {
 	// 	}
 	// }
 }
+
+func TestBSTLevelOrderTraversal(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// static void levelOrder(Node root){
+	// 	LinkedList<Node> q = new LinkedList<Node>();
+	// 	q.add(root);
+	//
+	// 	while(q.peek() != null) {
+	// 		Node n = q.remove();
+	// 		System.out.print(n.data);
+	//
+	// 		if(n.left != null) {
+	// 			q.add(n.left);
+	// 		}
+	// 		if(n.right != null) {
+	// 			q.add(n.right);
+	// 		}
+	//
+	// 		if(q.peek() != null) {
+	// 			System.out.print(" ");
+	// 		}
+	// 	}
+	// }
+}
+
+func TestMoreLinkedList(t *testing.T) {
+	// Not provided for Go
+	//
+	// Java8
+	// public static Node removeDuplicates(Node head) {
+	// 	Set<Integer> set = new HashSet<Integer>();
+	// 	if (head == null) return head;
+	// 	set.add(head.data);
+	//
+	// 	Node cur = head;
+	// 	while (cur.next != null) {
+	// 		if (set.contains(cur.next.data)) {
+	// 			cur.next = cur.next.next;
+	// 			continue;
+	// 		}
+	//
+	// 		set.add(cur.next.data);
+	// 		cur = cur.next;
+	// 	}
+	//
+	// 	return head;
+	// }
+}
