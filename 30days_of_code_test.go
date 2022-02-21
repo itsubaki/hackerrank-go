@@ -742,3 +742,59 @@ func TestMoreLinkedList(t *testing.T) {
 	// 	return head;
 	// }
 }
+
+func TestRunningTimeAndComplexity(t *testing.T) {
+	f := func(N int64) bool {
+		if N < 2 {
+			return false
+		}
+
+		if N == 2 {
+			return true
+		}
+
+		if N%2 == 0 {
+			return false
+		}
+
+		for i := int64(3); i < int64(math.Sqrt(float64(N)))+1; i = i + 2 {
+			if N%i == 0 {
+				return false
+			}
+		}
+
+		return true
+	}
+
+	cases := []struct {
+		in   int64
+		want bool
+	}{
+		{3, true},
+		{5, true},
+		{7, true},
+		{15, false},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+
+	// var T int
+	// fmt.Scan(&T)
+
+	// for i := 0; i < T; i++ {
+	// 	var N int64
+	// 	fmt.Scan(&N)
+	// 	if f(N) {
+	// 		fmt.Println("Prime")
+	// 	} else {
+	// 		fmt.Println("Not prime")
+	// 	}
+	// }
+}
