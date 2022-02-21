@@ -787,7 +787,6 @@ func TestRunningTimeAndComplexity(t *testing.T) {
 
 	// var T int
 	// fmt.Scan(&T)
-
 	// for i := 0; i < T; i++ {
 	// 	var N int64
 	// 	fmt.Scan(&N)
