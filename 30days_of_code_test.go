@@ -797,3 +797,62 @@ func TestRunningTimeAndComplexity(t *testing.T) {
 	// 	}
 	// }
 }
+
+func TestNestedLogic(t *testing.T) {
+	f := func(actualDay, actualMonth, actualYear, expectedDay, expectedMonth, expectedYear int) int {
+		if actualYear < expectedYear {
+			return 0
+		}
+
+		if actualYear > expectedYear {
+			return 10000
+		}
+
+		if actualMonth < expectedMonth {
+			return 0
+		}
+
+		if actualMonth > expectedMonth {
+			return (actualMonth - expectedMonth) * 500
+		}
+
+		if actualDay < expectedDay {
+			return 0
+		}
+
+		if actualDay > expectedDay {
+			return (actualDay - expectedDay) * 15
+		}
+
+		return 0
+	}
+
+	cases := []struct {
+		actualDay, actualMonth, actualYear       int
+		expectedDay, expectedMonth, expectedYear int
+		want                                     int
+	}{
+		{9, 6, 2015, 6, 6, 2015, 45},
+	}
+
+	for _, c := range cases {
+		got := f(c.actualDay, c.actualMonth, c.actualYear, c.expectedDay, c.actualMonth, c.expectedYear)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+
+	// var actualDay, actualMonth, actualYear int
+	// fmt.Scan(&actualDay)
+	// fmt.Scan(&actualMonth)
+	// fmt.Scan(&actualYear)
+	//
+	// var expectedDay, expectedMonth, expectedYear int
+	// fmt.Scan(&expectedDay)
+	// fmt.Scan(&expectedMonth)
+	// fmt.Scan(&expectedYear)
+	//
+	// fmt.Println(f(actualDay, actualMonth, actualYear, expectedDay, expectedMonth, expectedYear))
+}
