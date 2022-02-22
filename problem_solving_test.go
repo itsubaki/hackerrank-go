@@ -1,6 +1,8 @@
 package main_test
 
 import (
+	"fmt"
+	"math/big"
 	"testing"
 )
 
@@ -53,6 +55,36 @@ func TestNonDivisibleSubset(t *testing.T) {
 
 	for _, c := range cases {
 		got := f(c.k, c.s)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func bigF(n *big.Int, k int64) *big.Int {
+	if k == 1 {
+		return n
+	}
+
+	return bigF(n.Mul(n, big.NewInt(k-1)), k-1)
+}
+
+func TestExtraLongFactorials(t *testing.T) {
+	f := func(n int32) string {
+		return fmt.Sprintf("%s", bigF(big.NewInt(int64(n)), int64(n)))
+	}
+
+	cases := []struct {
+		in   int32
+		want string
+	}{
+		{25, "15511210043330985984000000"},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
 		if got == c.want {
 			continue
 		}
