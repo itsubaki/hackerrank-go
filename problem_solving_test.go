@@ -135,5 +135,39 @@ func TestGradingStudents(t *testing.T) {
 			t.Errorf("want=%v, got=%v", c.want, got)
 		}
 	}
+}
 
+func TestCompareTheTriplets(t *testing.T) {
+	f := func(a []int32, b []int32) []int32 {
+		out := make([]int32, 2)
+		for i := range a {
+			if a[i] > b[i] {
+				out[0]++
+			}
+
+			if a[i] < b[i] {
+				out[1]++
+			}
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		a, b []int32
+		want []int32
+	}{
+		{[]int32{5, 6, 7}, []int32{3, 6, 10}, []int32{1, 1}},
+	}
+
+	for _, c := range cases {
+		got := f(c.a, c.b)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
 }
