@@ -92,3 +92,48 @@ func TestExtraLongFactorials(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestGradingStudents(t *testing.T) {
+	var grade = map[int32]int32{
+		38: 40, 39: 40, 40: 40,
+		41: 41, 42: 42, 43: 45, 44: 45, 45: 45, 46: 46, 47: 47, 48: 50, 49: 50, 50: 50,
+		51: 51, 52: 52, 53: 55, 54: 55, 55: 55, 56: 56, 57: 57, 58: 60, 59: 60, 60: 60,
+		61: 61, 62: 62, 63: 65, 64: 65, 65: 65, 66: 66, 67: 67, 68: 70, 69: 70, 70: 70,
+		71: 71, 72: 72, 73: 75, 74: 75, 75: 75, 76: 76, 77: 77, 78: 80, 79: 80, 80: 80,
+		81: 81, 82: 82, 83: 85, 84: 85, 85: 85, 86: 86, 87: 87, 88: 90, 89: 90, 90: 90,
+		91: 91, 92: 92, 93: 95, 94: 95, 95: 95, 96: 96, 97: 97, 98: 100, 99: 100, 100: 100,
+	}
+
+	f := func(grades []int32) []int32 {
+		out := make([]int32, 0)
+		for _, g := range grades {
+			if g < 38 {
+				out = append(out, g)
+				continue
+			}
+
+			out = append(out, grade[g])
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		in   []int32
+		want []int32
+	}{
+		{[]int32{73, 67, 38, 33}, []int32{75, 67, 40, 33}},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+
+}
