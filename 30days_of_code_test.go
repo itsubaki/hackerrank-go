@@ -856,3 +856,7 @@ func TestNestedLogic(t *testing.T) {
 	//
 	// fmt.Println(f(actualDay, actualMonth, actualYear, expectedDay, expectedMonth, expectedYear))
 }
+
+func TestTesting(t *testing.T) {
+	// Not provided for Go
+}
