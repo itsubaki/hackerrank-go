@@ -860,3 +860,38 @@ func TestNestedLogic(t *testing.T) {
 func TestTesting(t *testing.T) {
 	// Not provided for Go
 }
+
+func TestBitwiseAND(t *testing.T) {
+	f := func(N, K int32) int32 {
+		var max int32
+		for i := int32(1); i < N+1; i++ {
+			for j := i + 1; j < N+1; j++ {
+				h := i & j
+				if h > max && h < K {
+					max = h
+				}
+			}
+		}
+
+		return max
+	}
+
+	cases := []struct {
+		N, K int32
+		want int32
+	}{
+		{5, 2, 1},
+		{8, 5, 4},
+		{2, 2, 0},
+	}
+
+	for _, c := range cases {
+		got := f(c.N, c.K)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+
+}
