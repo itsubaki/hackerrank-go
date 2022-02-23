@@ -249,3 +249,43 @@ func TestBirthdayCakeCandles(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestBreakingTheRecords(t *testing.T) {
+	f := func(scores []int32) []int32 {
+		var maxc, minc int32
+
+		max, min := scores[0], scores[0]
+		for _, s := range scores {
+			if s > max {
+				max = s
+				maxc++
+			}
+
+			if s < min {
+				min = s
+				minc++
+			}
+		}
+
+		return []int32{maxc, minc}
+	}
+
+	cases := []struct {
+		in   []int32
+		want []int32
+	}{
+		{[]int32{10, 5, 20, 20, 4, 5, 2, 25, 1}, []int32{2, 4}},
+		{[]int32{3, 4, 21, 36, 10, 28, 35, 5, 24, 42}, []int32{4, 0}},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+}
