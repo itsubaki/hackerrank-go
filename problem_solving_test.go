@@ -171,3 +171,48 @@ func TestCompareTheTriplets(t *testing.T) {
 		}
 	}
 }
+
+func TestStaircase(t *testing.T) {
+	f := func(n int32) []string {
+		out := make([]string, 0)
+		for i := int32(1); i < n+1; i++ {
+			var v string
+			for j := int32(0); j < n-i; j++ {
+				v = v + fmt.Sprintf(" ")
+			}
+
+			for j := int32(0); j < i; j++ {
+				v = v + fmt.Sprintf("#")
+			}
+
+			out = append(out, v)
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		in   int32
+		want []string
+	}{
+		{6, []string{
+			"     #",
+			"    ##",
+			"   ###",
+			"  ####",
+			" #####",
+			"######",
+		}},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+}
