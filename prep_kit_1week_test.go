@@ -894,6 +894,40 @@ func (h *int32Heap) Pop() interface{} {
 	return x
 }
 
+func TestFindMedian(t *testing.T) {
+	f := func(a []int32) int32 {
+		h := &int32Heap{}
+		heap.Init(h)
+
+		for i := range a {
+			heap.Push(h, a[i])
+		}
+
+		var v interface{}
+		for i := 0; i < len(a)/2+1; i++ {
+			v = heap.Pop(h)
+		}
+
+		return v.(int32)
+	}
+
+	cases := []struct {
+		in   []int32
+		want int32
+	}{
+		{[]int32{1, 2, 3, 4, 5}, 3},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
 func TestJesseAndCookies(t *testing.T) {
 	f := func(k int32, A []int32) int32 {
 		h := &int32Heap{}
