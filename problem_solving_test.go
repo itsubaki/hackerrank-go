@@ -216,3 +216,36 @@ func TestStaircase(t *testing.T) {
 		}
 	}
 }
+
+func TestBirthdayCakeCandles(t *testing.T) {
+	f := func(candles []int32) int32 {
+		count := make([]int32, 100000000)
+		var max int32
+		for _, c := range candles {
+			if c > max {
+				max = c
+			}
+
+			count[c]++
+		}
+
+		return count[max]
+	}
+
+	cases := []struct {
+		in   []int32
+		want int32
+	}{
+		{[]int32{4, 4, 1, 3}, 2},
+		{[]int32{3, 2, 1, 3}, 2},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
