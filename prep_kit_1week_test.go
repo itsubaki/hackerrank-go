@@ -1025,6 +1025,18 @@ func TestJesseAndCookies(t *testing.T) {
 
 func TestTreePreorderTraversal(t *testing.T) {
 	// Not provided for Go
+	//
+	// Java8
+	// public static void preOrder(Node root) {
+	// 	System.out.print(root.data + " ");
+	// 	if (root.left != null) {
+	// 		preOrder(root.left);
+	// 	}
+
+	// 	if (root.right != null) {
+	// 		preOrder(root.right);
+	// 	}
+	// }
 }
 
 func TestTreeHuffmanDecoding(t *testing.T) {
