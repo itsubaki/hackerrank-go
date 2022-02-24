@@ -289,3 +289,37 @@ func TestBreakingTheRecords(t *testing.T) {
 		}
 	}
 }
+
+func TestCountingSort2(t *testing.T) {
+	f := func(arr []int32) []int32 {
+		count := make([]int32, 100)
+		for i := range arr {
+			count[arr[i]] += 1
+		}
+
+		out := make([]int32, 0)
+		for i := range count {
+			for j := int32(0); j < count[i]; j++ {
+				out = append(out, int32(i))
+			}
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		in   []int32
+		want []int32
+	}{}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+}
