@@ -1180,25 +1180,14 @@ func add(root *trienode, str string) bool {
 func TestNoPrefixSet(t *testing.T) {
 	// Use trie tree to reduce complexity
 	f := func(words []string) []string {
-		out := make([]string, 0)
-
-		found := false
 		root := newTrieNode(' ')
 		for i := range words {
 			if !add(root, words[i]) {
-				out = append(out, "BAD SET")
-				out = append(out, words[i])
-				found = true
-				break
+				return []string{"BAD SET", words[i]}
 			}
 		}
 
-		if found {
-			return out
-		}
-
-		out = append(out, "GOOD SET")
-		return out
+		return []string{"GOOD SET"}
 	}
 
 	cases := []struct {
