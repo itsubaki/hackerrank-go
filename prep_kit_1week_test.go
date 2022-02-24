@@ -1182,9 +1182,11 @@ func TestNoPrefixSet(t *testing.T) {
 	f := func(words []string) []string {
 		root := newTrieNode(' ')
 		for i := range words {
-			if !add(root, words[i]) {
-				return []string{"BAD SET", words[i]}
+			if add(root, words[i]) {
+				continue
 			}
+
+			return []string{"BAD SET", words[i]}
 		}
 
 		return []string{"GOOD SET"}
