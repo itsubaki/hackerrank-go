@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
 	"testing"
@@ -859,6 +860,45 @@ func TestNestedLogic(t *testing.T) {
 
 func TestTesting(t *testing.T) {
 	// Not provided for Go
+}
+
+func TestRegexPatternAndIntroToDatabase(t *testing.T) {
+	f := func(name, email []string) []string {
+		out := make([]string, 0)
+		for i := range email {
+			if !strings.HasSuffix(email[i], "@gmail.com") {
+				continue
+			}
+
+			out = append(out, name[i])
+		}
+
+		sort.Slice(out, func(i, j int) bool { return out[i] < out[j] })
+		return out
+	}
+
+	cases := []struct {
+		name, email []string
+		want        []string
+	}{
+		{
+			[]string{"riya", "julia", "julia", "julia", "samantha", "tanya"},
+			[]string{"riya@gmail.com", "julia@julia.me", "sjulia@gmail.com", "julia@gmail.com", "samantha@gmail.com", "tanya@gmail.com"},
+			[]string{"julia", "julia", "riya", "samantha", "tanya"},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.name, c.email)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+
 }
 
 func TestBitwiseAND(t *testing.T) {
