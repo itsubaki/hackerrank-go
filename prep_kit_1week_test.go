@@ -1142,14 +1142,63 @@ func TestTreeHuffmanDecoding(t *testing.T) {
 }
 
 type trienode struct {
-	key      string
-	children map[rune]*trienode
+	key         rune
+	children    map[rune]*trienode
+	isCompleted bool
+	count       int32
+}
+
+func newTrieNode(key rune) *trienode {
+	return &trienode{
+		key:      key,
+		children: make(map[rune]*trienode),
+	}
+}
+
+func add(root *trienode, str string) bool {
+	cur := root
+	for i := 0; i < len(str); i++ {
+		c := rune(str[i])
+		index := c - 'a'
+		if _, ok := cur.children[index]; !ok {
+			cur.children[index] = newTrieNode(c)
+		}
+
+		if cur.isCompleted {
+			return false
+		}
+
+		cur.count++
+		cur = cur.children[index]
+	}
+
+	cur.isCompleted = true
+	cur.count++
+	return cur.count < 2
 }
 
 func TestNoPrefixSet(t *testing.T) {
 	// Use trie tree to reduce complexity
 	f := func(words []string) []string {
-		return words
+		out := make([]string, 0)
+
+		found := false
+		root := newTrieNode(' ')
+		for i := range words {
+			if !add(root, words[i]) {
+				out = append(out, "BAD SET")
+				out = append(out, words[i])
+				found = true
+				break
+			}
+		}
+
+		if found {
+			return out
+		}
+
+		out = append(out, "GOOD SET")
+		return out
 	}
 
 	cases := []struct {
