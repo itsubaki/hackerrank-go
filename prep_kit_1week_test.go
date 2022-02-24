@@ -897,14 +897,90 @@ func TestSimpleTextEditor(t *testing.T) {
 	// }
 }
 
-func TestLegoBlocks(t *testing.T) {
-	f := func(n, m int32) int32 {
-		return 0
+type LegoBlocks struct {
+	ways     [][]int64
+	restrict [][]int64
+	mod      int64
+}
+
+func NewLegoBlocks() *LegoBlocks {
+	ways, restrict := make([][]int64, 0), make([][]int64, 0)
+	for i := 0; i < 1001; i++ {
+		v, rv := make([]int64, 0), make([]int64, 0)
+		for j := 0; j < 1001; j++ {
+			v, rv = append(v, -1), append(rv, -1)
+		}
+		ways, restrict = append(ways, v), append(restrict, rv)
 	}
 
+	return &LegoBlocks{
+		mod:      1000000007,
+		ways:     ways,
+		restrict: restrict,
+	}
+}
+
+func (b *LegoBlocks) solve(n, m int32) int64 {
+	if b.ways[n][m] != -1 {
+		return b.ways[n][m]
+	}
+
+	if m == 1 {
+		b.ways[n][m] = 1
+		return 1
+	}
+
+	if n == 1 {
+		if m < 5 {
+			v := 2 * b.solve(1, m-1)
+			b.ways[n][m] = v
+			return v
+		}
+
+		v := b.solve(1, m-1)
+		v = (v + b.solve(1, m-2)) % b.mod
+		v = (v + b.solve(1, m-3)) % b.mod
+		v = (v + b.solve(1, m-4)) % b.mod
+		b.ways[n][m] = v
+		return v
+	}
+
+	v := int64(1)
+	o := b.solve(1, m)
+	for i := int32(0); i < n; i++ {
+		v = (v * o) % b.mod
+	}
+
+	b.ways[n][m] = v
+	return v
+}
+
+func (b *LegoBlocks) Solve(n, m int32) int64 {
+	if b.restrict[n][m] != -1 {
+		return b.restrict[n][m]
+	}
+
+	if m == 1 {
+		b.restrict[n][m] = 1
+		return 1
+	}
+
+	v := b.solve(n, m)
+	for i := int32(1); i < m; i++ {
+		v = v - (b.solve(n, i)*b.Solve(n, m-i))%b.mod
+		if v < 0 {
+			v = v + b.mod
+		}
+	}
+
+	b.restrict[n][m] = v
+	return v
+}
+
+func TestLegoBlocks(t *testing.T) {
 	cases := []struct {
 		n, m int32
-		want int32
+		want int64
 	}{
 		{2, 2, 3},
 		{3, 2, 7},
@@ -913,7 +989,7 @@ func TestLegoBlocks(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		got := f(c.n, c.m)
+		got := NewLegoBlocks().Solve(c.n, c.m)
 		if got == c.want {
 			continue
 		}
