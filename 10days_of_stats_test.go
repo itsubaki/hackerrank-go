@@ -77,3 +77,35 @@ func TestMeanMedianAndMode(t *testing.T) {
 	// 	fmt.Println(o)
 	// }
 }
+
+func TestWeightedMean(t *testing.T) {
+	f := func(X []int32, W []int32) float32 {
+		var sum, sumW int32
+		for i := range W {
+			sum += X[i] * W[i]
+			sumW += W[i]
+		}
+
+		return float32(sum) / float32(sumW)
+	}
+
+	cases := []struct {
+		X, W []int32
+		want float32
+	}{
+		{
+			[]int32{10, 40, 30, 50, 20},
+			[]int32{1, 2, 3, 4, 5},
+			32.0,
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.X, c.W)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
