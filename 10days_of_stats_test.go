@@ -293,6 +293,50 @@ func TestMoreDice(t *testing.T) {
 }
 
 func TestCompoundEventProbability(t *testing.T) {
+	frac := func(real float64) []int {
+		list := make([]int, 0)
+		r := real
+		for {
+			t := math.Trunc(r)
+			list = append(list, int(t))
+
+			diff := r - t
+			if diff < 1e-3 {
+				break
+			}
+
+			r = 1.0 / diff
+		}
+
+		return list
+	}
+
+	conv := func(cfx []int) (int, int, float64) {
+		l := len(cfx)
+		if l == 1 {
+			return cfx[0], 1, float64(cfx[0])
+		}
+
+		s, r := 1, cfx[l-1]
+		for i := 2; i < l; i++ {
+			s, r = r, cfx[l-i]*r+s
+		}
+		s = s + cfx[0]*r
+
+		return s, r, float64(s) / float64(r)
+	}
+
+	xred := 4.0 / 7.0
+	yred := 5.0 / 9.0
+	zred := 4.0 / 8.0
+
+	p := (xred * yred * (1 - zred)) + (xred * (1 - yred) * zred) + ((1 - xred) * yred * zred)
+	n, d, _ := conv(frac(p))
+
+	if n != 17 || d != 42 {
+		t.Errorf("want=17/42, got=%v/%v\n", n, d)
+	}
+
 	// answer
 	// 17/42
 }
