@@ -253,3 +253,41 @@ func TestStandardDeviation(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestBasicProbability(t *testing.T) {
+	var count int
+	for i := 1; i < 7; i++ {
+		for j := 1; j < 7; j++ {
+			if i+j < 10 {
+				count++
+			}
+		}
+	}
+
+	if count != 30 {
+		t.Errorf("want=30, got=%v", count)
+	}
+
+	// answer
+	// 30/36 -> 5/6
+}
+
+func TestMoreDice(t *testing.T) {
+	var count int
+	for i := 1; i < 7; i++ {
+		for j := 1; j < 7; j++ {
+			if i+j == 6 {
+				count++
+			}
+		}
+	}
+
+	if count != 5 {
+		t.Errorf("want=30/36, got=%v", count)
+	}
+
+	// answer
+	// the values rolled by each die will be different
+	// 5 - 1(3, 3) = 4
+	// 4/36 ->1/9
+}
