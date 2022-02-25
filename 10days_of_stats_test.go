@@ -111,6 +111,59 @@ func TestWeightedMean(t *testing.T) {
 	}
 }
 
+func TestQuartiles(t *testing.T) {
+	f := func(arr []int32) []int32 {
+		med := func(n []int32) int32 {
+			if len(n)%2 == 0 {
+				return (n[len(n)/2] + n[len(n)/2-1]) / 2
+			}
+
+			return n[len(n)/2]
+		}
+
+		sort.Slice(arr, func(i, j int) bool { return arr[i] < arr[j] })
+		half := len(arr) / 2
+		if len(arr)%2 == 0 {
+			return []int32{med(arr[:half]), med(arr), med(arr[half:])}
+		}
+
+		return []int32{med(arr[:half]), med(arr), med(arr[half+1:])}
+	}
+
+	cases := []struct {
+		in   []int32
+		want []int32
+	}{
+		{
+			[]int32{9, 5, 7, 1, 3},
+			[]int32{2, 5, 8},
+		},
+		{
+			[]int32{1, 3, 5, 7},
+			[]int32{2, 4, 6},
+		},
+		{
+			[]int32{3, 7, 8, 5, 12, 14, 21, 13, 18},
+			[]int32{6, 12, 16},
+		},
+		{
+			[]int32{3, 7, 8, 5, 12, 14, 21, 15, 18, 14},
+			[]int32{7, 13, 15},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+}
+
 func TestStandardDeviation(t *testing.T) {
 	f := func(arr []int32) float64 {
 		var sum int32
