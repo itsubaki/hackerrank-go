@@ -164,6 +164,59 @@ func TestQuartiles(t *testing.T) {
 	}
 }
 
+func TestInterquartileRange(t *testing.T) {
+	f := func(values []int32, freqs []int32) float64 {
+		med := func(n []int32) float64 {
+			if len(n)%2 == 0 {
+				return float64(n[len(n)/2]+n[len(n)/2-1]) / 2.0
+			}
+
+			return float64(n[len(n)/2])
+		}
+
+		arr := make([]int32, 0)
+		for i := range values {
+			for j := int32(0); j < freqs[i]; j++ {
+				arr = append(arr, values[i])
+			}
+		}
+
+		sort.Slice(arr, func(i, j int) bool { return arr[i] < arr[j] })
+		half := len(arr) / 2
+
+		if len(arr)%2 == 0 {
+			return med(arr[half:]) - med(arr[:half])
+		}
+
+		return med(arr[half+1:]) - med(arr[:half])
+	}
+
+	cases := []struct {
+		v, f []int32
+		want float64
+	}{
+		{
+			[]int32{6, 12, 8, 10, 20, 16},
+			[]int32{5, 4, 3, 2, 1, 5},
+			9.0,
+		},
+		{
+			[]int32{10, 40, 30, 50, 20},
+			[]int32{1, 2, 3, 4, 5},
+			30.0,
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.v, c.f)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
 func TestStandardDeviation(t *testing.T) {
 	f := func(arr []int32) float64 {
 		var sum int32
