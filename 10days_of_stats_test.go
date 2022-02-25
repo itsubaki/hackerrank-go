@@ -291,3 +291,8 @@ func TestMoreDice(t *testing.T) {
 	// 5 - 1(3, 3) = 4
 	// 4/36 ->1/9
 }
+
+func TestCompoundEventProbability(t *testing.T) {
+	// answer
+	// 17/42
+}
