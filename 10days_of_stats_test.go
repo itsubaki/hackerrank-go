@@ -2,6 +2,7 @@ package main_test
 
 import (
 	"fmt"
+	"math"
 	"sort"
 	"testing"
 )
@@ -102,6 +103,43 @@ func TestWeightedMean(t *testing.T) {
 
 	for _, c := range cases {
 		got := f(c.X, c.W)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestStandardDeviation(t *testing.T) {
+	f := func(arr []int32) float64 {
+		var sum int32
+		for _, a := range arr {
+			sum = sum + a
+		}
+		mean := float64(sum) / float64(len(arr))
+
+		var s float64
+		for _, a := range arr {
+			s = s + math.Pow((float64(a)-mean), 2.0)
+		}
+
+		v := s / float64(len(arr))
+		return math.Sqrt(v)
+	}
+
+	cases := []struct {
+		in   []int32
+		want float64
+	}{
+		{
+			[]int32{10, 40, 30, 50, 20},
+			14.142135623730951,
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
 		if got == c.want {
 			continue
 		}
