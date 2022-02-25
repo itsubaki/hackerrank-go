@@ -340,3 +340,8 @@ func TestCompoundEventProbability(t *testing.T) {
 	// answer
 	// 17/42
 }
+
+func TestConditionalProbability(t *testing.T) {
+	// answer
+	// 1/3
+}
