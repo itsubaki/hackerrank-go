@@ -345,3 +345,8 @@ func TestConditionalProbability(t *testing.T) {
 	// answer
 	// 1/3
 }
+
+func TestCardsOfTheSameSuit(t *testing.T) {
+	// answer
+	// 12/51
+}
