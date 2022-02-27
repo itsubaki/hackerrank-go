@@ -799,44 +799,44 @@ func TestRunningTimeAndComplexity(t *testing.T) {
 }
 
 func TestNestedLogic(t *testing.T) {
-	f := func(actualDay, actualMonth, actualYear, expectedDay, expectedMonth, expectedYear int) int {
-		if actualYear < expectedYear {
+	f := func(aDay, aMon, aYear, eDay, eMon, eYear int) int {
+		if aYear < eYear {
 			return 0
 		}
 
-		if actualYear > expectedYear {
+		if aYear > eYear {
 			return 10000
 		}
 
-		if actualMonth < expectedMonth {
+		if aMon < eMon {
 			return 0
 		}
 
-		if actualMonth > expectedMonth {
-			return (actualMonth - expectedMonth) * 500
+		if aMon > eMon {
+			return (aMon - eMon) * 500
 		}
 
-		if actualDay < expectedDay {
+		if aDay < eDay {
 			return 0
 		}
 
-		if actualDay > expectedDay {
-			return (actualDay - expectedDay) * 15
+		if aDay > eDay {
+			return (aDay - eDay) * 15
 		}
 
 		return 0
 	}
 
 	cases := []struct {
-		actualDay, actualMonth, actualYear       int
-		expectedDay, expectedMonth, expectedYear int
-		want                                     int
+		aDay, aMon, aYear int
+		eDay, eMon, eYear int
+		want              int
 	}{
 		{9, 6, 2015, 6, 6, 2015, 45},
 	}
 
 	for _, c := range cases {
-		got := f(c.actualDay, c.actualMonth, c.actualYear, c.expectedDay, c.actualMonth, c.expectedYear)
+		got := f(c.aDay, c.aMon, c.aYear, c.eDay, c.eMon, c.eYear)
 		if got == c.want {
 			continue
 		}
@@ -844,17 +844,17 @@ func TestNestedLogic(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 
-	// var actualDay, actualMonth, actualYear int
-	// fmt.Scan(&actualDay)
-	// fmt.Scan(&actualMonth)
-	// fmt.Scan(&actualYear)
+	// var aDay, aMon, aYear int
+	// fmt.Scan(&aDay)
+	// fmt.Scan(&aMon)
+	// fmt.Scan(&aYear)
 	//
-	// var expectedDay, expectedMonth, expectedYear int
-	// fmt.Scan(&expectedDay)
-	// fmt.Scan(&expectedMonth)
-	// fmt.Scan(&expectedYear)
+	// var eDay, eMon, eYear int
+	// fmt.Scan(&eDay)
+	// fmt.Scan(&eMon)
+	// fmt.Scan(&eYear)
 	//
-	// fmt.Println(f(actualDay, actualMonth, actualYear, expectedDay, expectedMonth, expectedYear))
+	// fmt.Println(f(aDay, aMon, aYear, eDay, eMon, eYear))
 }
 
 func TestTesting(t *testing.T) {
@@ -862,14 +862,19 @@ func TestTesting(t *testing.T) {
 }
 
 func TestRegexPatternAndIntroToDatabase(t *testing.T) {
-	f := func(name, email []string) []string {
+	f := func(in []string) []string {
+		name, email := make([]string, 0), make([]string, 0)
+		for _, e := range in {
+			s := strings.Split(e, " ")
+			name = append(name, s[0])
+			email = append(email, s[1])
+		}
+
 		out := make([]string, 0)
 		for i := range email {
-			if !strings.HasSuffix(email[i], "@gmail.com") {
-				continue
+			if strings.HasSuffix(email[i], "@gmail.com") {
+				out = append(out, name[i])
 			}
-
-			out = append(out, name[i])
 		}
 
 		sort.Slice(out, func(i, j int) bool { return out[i] < out[j] })
@@ -877,18 +882,24 @@ func TestRegexPatternAndIntroToDatabase(t *testing.T) {
 	}
 
 	cases := []struct {
-		name, email []string
-		want        []string
+		in   []string
+		want []string
 	}{
 		{
-			[]string{"riya", "julia", "julia", "julia", "samantha", "tanya"},
-			[]string{"riya@gmail.com", "julia@julia.me", "sjulia@gmail.com", "julia@gmail.com", "samantha@gmail.com", "tanya@gmail.com"},
+			[]string{
+				"riya riya@gmail.com",
+				"julia julia@julia.me",
+				"julia sjulia@gmail.com",
+				"julia julia@gmail.com",
+				"samantha samantha@gmail.com",
+				"tanya tanya@gmail.com",
+			},
 			[]string{"julia", "julia", "riya", "samantha", "tanya"},
 		},
 	}
 
 	for _, c := range cases {
-		got := f(c.name, c.email)
+		got := f(c.in)
 		for i := range got {
 			if got[i] == c.want[i] {
 				continue
