@@ -375,7 +375,6 @@ func TestRecursion3(t *testing.T) {
 func TestBinaryNumbers(t *testing.T) {
 	f := func(i int32) int32 {
 		s := strconv.FormatInt(int64(i), 2)
-		fmt.Println(s)
 
 		var max, count int32
 		for _, r := range s {
