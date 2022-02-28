@@ -356,30 +356,50 @@ func TestDrawingMarbles(t *testing.T) {
 	// 2/3
 }
 
-func TestBinomialDistribution1(t *testing.T) {
-	comb := func(n, r int32) float64 {
-		a := factorial(n) / (factorial(r) * factorial(n-r))
-		return float64(a)
+func comb(n, r int32) float64 {
+	a := factorial(n) / (factorial(r) * factorial(n-r))
+	return float64(a)
+}
+
+func dist(n int32, p float64, begin, end int32) float64 {
+	var a float64
+	for i := begin; i < end; i++ {
+		a = a + comb(n, i)*math.Pow(p, float64(i))*math.Pow(1-p, float64(n-i))
 	}
 
+	return a
+}
+
+func TestBinomialDistribution1(t *testing.T) {
 	n := int32(6)
 	p := 1.09 / (1.09 + 1.0)
-	q := 1 - p
-
-	var a float64
-	for i := int32(3); i < 7; i++ {
-		a = a + comb(n, i)*math.Pow(p, float64(i))*math.Pow(q, float64(6-i))
-	}
 
 	want := "0.696"
-	got := fmt.Sprintf("%.3f", a)
+	got := fmt.Sprintf("%.3f", dist(n, p, 3, 7))
 	if got != want {
 		t.Errorf("want=%v, got=%v", want, got)
 	}
 }
 
 func TestBinomialDistribution2(t *testing.T) {
+	n := int32(10)
+	p := 0.12
 
+	got := []string{
+		fmt.Sprintf("%.3f", dist(n, p, 0, 3)),
+		fmt.Sprintf("%.3f", dist(n, p, 2, n+1)),
+	}
+
+	want := []string{
+		"0.891",
+		"0.342",
+	}
+
+	for i := range got {
+		if got[i] != want[i] {
+			t.Errorf("want=%v, got=%v", want, got)
+		}
+	}
 }
 
 func TestGeometricDistribution1(t *testing.T) {
