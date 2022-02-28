@@ -355,3 +355,29 @@ func TestDrawingMarbles(t *testing.T) {
 	// answer
 	// 2/3
 }
+
+func TestGeometricDistribution1(t *testing.T) {
+	p := 1.0 / 3.0
+
+	// 4個は故障せず、5個目は故障する。
+	a := (1 - p) * (1 - p) * (1 - p) * (1 - p) * p
+
+	want := "0.066"
+	got := fmt.Sprintf("%.3f", a)
+	if got != want {
+		t.Errorf("want=%v, got=%v", want, got)
+	}
+}
+
+func TestGeometricDistribution2(t *testing.T) {
+	p := 1.0 / 3.0
+
+	// 1から5のどれかが故障する確率 = すべての確率 - 1から5が故障しない確率
+	a := 1 - ((1 - p) * (1 - p) * (1 - p) * (1 - p) * (1 - p))
+
+	want := "0.868"
+	got := fmt.Sprintf("%.3f", a)
+	if got != want {
+		t.Errorf("want=%v, got=%v", want, got)
+	}
+}
