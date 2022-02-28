@@ -352,3 +352,65 @@ func TestCamelCase(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestStrongPassword(t *testing.T) {
+	f := func(n int32, password string) int32 {
+		var digit, low, upp, sp bool
+		for _, r := range password {
+			if r >= 'A' && r <= 'Z' {
+				upp = true
+			}
+			if r >= 'a' && r <= 'z' {
+				low = true
+			}
+			if r >= '0' && r <= '9' {
+				digit = true
+			}
+
+			for _, s := range "!@#$%^&*()-+" {
+				if r == s {
+					sp = true
+					break
+				}
+			}
+		}
+
+		var count int32
+		if digit {
+			count++
+		}
+		if low {
+			count++
+		}
+		if upp {
+			count++
+		}
+		if sp {
+			count++
+		}
+
+		add := 4 - count
+		if n+add > 5 {
+			return add
+		}
+
+		return 6 - n
+	}
+
+	cases := []struct {
+		n    int32
+		p    string
+		want int32
+	}{
+		{3, "Ab1", 3},
+	}
+
+	for _, c := range cases {
+		got := f(c.n, c.p)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
