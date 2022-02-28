@@ -374,8 +374,8 @@ func TestBinomialDistribution1(t *testing.T) {
 	n := int32(6)
 	p := 1.09 / (1.09 + 1.0)
 
-	want := "0.696"
 	got := fmt.Sprintf("%.3f", dist(n, p, 3, 7))
+	want := "0.696"
 	if got != want {
 		t.Errorf("want=%v, got=%v", want, got)
 	}
@@ -408,8 +408,8 @@ func TestGeometricDistribution1(t *testing.T) {
 	// 4個は故障せず、5個目は故障する。
 	a := (1 - p) * (1 - p) * (1 - p) * (1 - p) * p
 
-	want := "0.066"
 	got := fmt.Sprintf("%.3f", a)
+	want := "0.066"
 	if got != want {
 		t.Errorf("want=%v, got=%v", want, got)
 	}
@@ -421,8 +421,8 @@ func TestGeometricDistribution2(t *testing.T) {
 	// 1から5のどれかが故障する確率 = すべての確率 - 1から5が故障しない確率
 	a := 1 - ((1 - p) * (1 - p) * (1 - p) * (1 - p) * (1 - p))
 
-	want := "0.868"
 	got := fmt.Sprintf("%.3f", a)
+	want := "0.868"
 	if got != want {
 		t.Errorf("want=%v, got=%v", want, got)
 	}
