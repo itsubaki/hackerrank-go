@@ -323,3 +323,32 @@ func TestCountingSort2(t *testing.T) {
 		}
 	}
 }
+
+func TestCamelCase(t *testing.T) {
+	f := func(s string) int32 {
+		var count int32
+		for _, r := range s {
+			if r >= 'A' && r <= 'Z' {
+				count++
+			}
+		}
+
+		return count + 1
+	}
+
+	cases := []struct {
+		in   string
+		want int32
+	}{
+		{"oneTwoThree", 3},
+	}
+
+	for _, c := range cases {
+		got := f(c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
