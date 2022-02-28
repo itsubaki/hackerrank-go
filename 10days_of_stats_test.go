@@ -276,19 +276,22 @@ func TestMoreDice(t *testing.T) {
 	var count int
 	for i := 1; i < 7; i++ {
 		for j := 1; j < 7; j++ {
+			if i == j {
+				// the values rolled by each die will be different
+				continue
+			}
+
 			if i+j == 6 {
 				count++
 			}
 		}
 	}
 
-	if count != 5 {
-		t.Errorf("want=30/36, got=%v", count)
+	if count != 4 {
+		t.Errorf("want=4/36, got=%v/36", count)
 	}
 
 	// answer
-	// the values rolled by each die will be different
-	// 5 - 1(3, 3) = 4
 	// 4/36 ->1/9
 }
 
@@ -404,8 +407,6 @@ func TestBinomialDistribution2(t *testing.T) {
 
 func TestGeometricDistribution1(t *testing.T) {
 	p := 1.0 / 3.0
-
-	// 4個は故障せず、5個目は故障する。
 	a := (1 - p) * (1 - p) * (1 - p) * (1 - p) * p
 
 	got := fmt.Sprintf("%.3f", a)
@@ -417,8 +418,6 @@ func TestGeometricDistribution1(t *testing.T) {
 
 func TestGeometricDistribution2(t *testing.T) {
 	p := 1.0 / 3.0
-
-	// 1から5のどれかが故障する確率 = すべての確率 - 1から5が故障しない確率
 	a := 1 - ((1 - p) * (1 - p) * (1 - p) * (1 - p) * (1 - p))
 
 	got := fmt.Sprintf("%.3f", a)
