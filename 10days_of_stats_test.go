@@ -356,6 +356,32 @@ func TestDrawingMarbles(t *testing.T) {
 	// 2/3
 }
 
+func TestBinomialDistribution1(t *testing.T) {
+	comb := func(n, r int32) float64 {
+		a := factorial(n) / (factorial(r) * factorial(n-r))
+		return float64(a)
+	}
+
+	n := int32(6)
+	p := 1.09 / (1.09 + 1.0)
+	q := 1 - p
+
+	var a float64
+	for i := int32(3); i < 7; i++ {
+		a = a + comb(n, i)*math.Pow(p, float64(i))*math.Pow(q, float64(6-i))
+	}
+
+	want := "0.696"
+	got := fmt.Sprintf("%.3f", a)
+	if got != want {
+		t.Errorf("want=%v, got=%v", want, got)
+	}
+}
+
+func TestBinomialDistribution2(t *testing.T) {
+
+}
+
 func TestGeometricDistribution1(t *testing.T) {
 	p := 1.0 / 3.0
 
