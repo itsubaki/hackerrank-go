@@ -480,3 +480,45 @@ func NumberLineJumps(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestBetweenTwoSets(t *testing.T) {
+	f := func(a, b []int32) int32 {
+		var out int32
+		for i := int32(1); i < 101; i++ {
+			ok := true
+			for j := 0; j < len(a) && ok; j++ {
+				if i%a[j] != 0 {
+					ok = false
+				}
+			}
+
+			for j := 0; j < len(b) && ok; j++ {
+				if b[j]%i != 0 {
+					ok = false
+				}
+			}
+
+			if ok {
+				out++
+			}
+		}
+
+		return out
+	}
+
+	cases := []struct {
+		a, b []int32
+		want int32
+	}{
+		{[]int32{2, 4}, []int32{16, 32, 96}, 3},
+	}
+
+	for _, c := range cases {
+		got := f(c.a, c.b)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
