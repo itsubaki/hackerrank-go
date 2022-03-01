@@ -474,3 +474,26 @@ func TestPoissonDistribution2(t *testing.T) {
 		}
 	}
 }
+
+// The cumulative distribution function for a function with normal distribution
+func normal(m, s, x float64) float64 {
+	return 0.5 * (1.0 + math.Erf((x-m)/(s*math.Sqrt2)))
+}
+
+func TestNormalDistribution1(t *testing.T) {
+	got := []string{
+		fmt.Sprintf("%.3f", normal(20, 2, 19.5)),
+		fmt.Sprintf("%.3f", normal(20, 2, 22)-normal(20, 2, 20)),
+	}
+
+	want := []string{
+		"0.401",
+		"0.341",
+	}
+
+	for i := range got {
+		if got[i] != want[i] {
+			t.Errorf("want=%v, got=%v", want, got)
+		}
+	}
+}
