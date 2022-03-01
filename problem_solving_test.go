@@ -414,3 +414,40 @@ func TestStrongPassword(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestAppleAndOrange(t *testing.T) {
+	f := func(s, t, a, b int32, apples, oranges []int32) (int, int) {
+		var ac int
+		for i := range apples {
+			if a+apples[i] >= s && a+apples[i] <= t {
+				ac++
+			}
+		}
+
+		var bc int
+		for i := range oranges {
+			if b+oranges[i] >= s && b+oranges[i] <= t {
+				bc++
+			}
+		}
+
+		return ac, bc
+	}
+
+	cases := []struct {
+		s, t, a, b      int32
+		apples, oranges []int32
+		ac, bc          int
+	}{
+		{7, 11, 5, 15, []int32{-2, 2, 1}, []int32{5, -6}, 1, 1},
+	}
+
+	for _, c := range cases {
+		ac, bc := f(c.s, c.t, c.a, c.b, c.apples, c.oranges)
+		if ac == c.ac && bc == c.bc {
+			continue
+		}
+
+		t.Errorf("want=%v,%v, got=%v,%v", c.ac, c.bc, ac, bc)
+	}
+}
