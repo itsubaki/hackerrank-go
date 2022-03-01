@@ -451,3 +451,32 @@ func TestAppleAndOrange(t *testing.T) {
 		t.Errorf("want=%v,%v, got=%v,%v", c.ac, c.bc, ac, bc)
 	}
 }
+
+func NumberLineJumps(t *testing.T) {
+	f := func(x1, x2, v1, v2 int32) string {
+		diff := v1 - v2
+		if diff < 1 {
+			return "NO"
+		}
+
+		if (x1-x2)%diff == 0 {
+			return "YES"
+		}
+
+		return "NO"
+	}
+
+	cases := []struct {
+		x1, x2, v1, v2 int32
+		want           string
+	}{}
+
+	for _, c := range cases {
+		got := f(c.x1, c.x2, c.v1, c.v2)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
