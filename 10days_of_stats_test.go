@@ -364,7 +364,7 @@ func comb(n, r int32) float64 {
 	return float64(a)
 }
 
-func dist(n int32, p float64, begin, end int32) float64 {
+func binomial(n int32, p float64, begin, end int32) float64 {
 	var a float64
 	for i := begin; i < end; i++ {
 		a = a + comb(n, i)*math.Pow(p, float64(i))*math.Pow(1-p, float64(n-i))
@@ -377,7 +377,7 @@ func TestBinomialDistribution1(t *testing.T) {
 	n := int32(6)
 	p := 1.09 / (1.09 + 1.0)
 
-	got := fmt.Sprintf("%.3f", dist(n, p, 3, 7))
+	got := fmt.Sprintf("%.3f", binomial(n, p, 3, 7))
 	want := "0.696"
 	if got != want {
 		t.Errorf("want=%v, got=%v", want, got)
@@ -389,8 +389,8 @@ func TestBinomialDistribution2(t *testing.T) {
 	p := 0.12
 
 	got := []string{
-		fmt.Sprintf("%.3f", dist(n, p, 0, 3)),
-		fmt.Sprintf("%.3f", dist(n, p, 2, n+1)),
+		fmt.Sprintf("%.3f", binomial(n, p, 0, 3)),
+		fmt.Sprintf("%.3f", binomial(n, p, 2, n+1)),
 	}
 
 	want := []string{
@@ -451,5 +451,26 @@ func TestPoissonDistribution1(t *testing.T) {
 		}
 
 		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestPoissonDistribution2(t *testing.T) {
+	x := 0.88
+	y := 1.55
+
+	got := []string{
+		fmt.Sprintf("%.3f", 160+40*(x+math.Pow(x, 2.0))),
+		fmt.Sprintf("%.3f", 128+40*(y+math.Pow(y, 2.0))),
+	}
+
+	want := []string{
+		"226.176",
+		"286.100",
+	}
+
+	for i := range got {
+		if got[i] != want[i] {
+			t.Errorf("want=%v, got=%v", want, got)
+		}
 	}
 }
