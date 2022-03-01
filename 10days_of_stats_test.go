@@ -426,3 +426,30 @@ func TestGeometricDistribution2(t *testing.T) {
 		t.Errorf("want=%v, got=%v", want, got)
 	}
 }
+
+func poisson(m float64, x int32) float64 {
+	return math.Pow(m, float64(x)) * math.Exp(-m) / float64(factorial(x))
+}
+
+func TestPoissonDistribution1(t *testing.T) {
+	f := func(m float64, x int32) string {
+		return fmt.Sprintf("%.3f", poisson(m, x))
+	}
+
+	cases := []struct {
+		m    float64
+		x    int32
+		want string
+	}{
+		{2.5, 5, "0.067"},
+	}
+
+	for _, c := range cases {
+		got := f(c.m, c.x)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
