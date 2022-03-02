@@ -28,8 +28,8 @@ func binomial(n int32, p float64, begin, end int32) float64 {
 	return a
 }
 
-func poisson(m float64, x int32) float64 {
-	return math.Pow(m, float64(x)) * math.Exp(-m) / float64(factorial(x))
+func poisson(lambda float64, k int32) float64 {
+	return math.Pow(lambda, float64(k)) * math.Exp(-lambda) / float64(factorial(k))
 }
 
 // The cumulative distribution function for a function with normal distribution
