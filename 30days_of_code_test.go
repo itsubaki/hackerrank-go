@@ -776,18 +776,6 @@ func TestRunningTimeAndComplexity(t *testing.T) {
 
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
-
-	// var T int
-	// fmt.Scan(&T)
-	// for i := 0; i < T; i++ {
-	// 	var N int64
-	// 	fmt.Scan(&N)
-	// 	if f(N) {
-	// 		fmt.Println("Prime")
-	// 	} else {
-	// 		fmt.Println("Not prime")
-	// 	}
-	// }
 }
 
 func TestNestedLogic(t *testing.T) {
@@ -835,18 +823,6 @@ func TestNestedLogic(t *testing.T) {
 
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
-
-	// var aDay, aMon, aYear int
-	// fmt.Scan(&aDay)
-	// fmt.Scan(&aMon)
-	// fmt.Scan(&aYear)
-	//
-	// var eDay, eMon, eYear int
-	// fmt.Scan(&eDay)
-	// fmt.Scan(&eMon)
-	// fmt.Scan(&eYear)
-	//
-	// fmt.Println(f(aDay, aMon, aYear, eDay, eMon, eYear))
 }
 
 func TestTesting(t *testing.T) {
@@ -935,5 +911,4 @@ func TestBitwiseAND(t *testing.T) {
 
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
-
 }

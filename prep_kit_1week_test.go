@@ -12,28 +12,6 @@ import (
 	"testing"
 )
 
-func TestTemplate(t *testing.T) {
-	f := func(s string) string {
-		return s
-	}
-
-	cases := []struct {
-		in   string
-		want string
-	}{
-		{"foo", "foo"},
-	}
-
-	for _, c := range cases {
-		got := f(c.in)
-		if got == c.want {
-			continue
-		}
-
-		t.Errorf("want=%v, got=%v", c.want, got)
-	}
-}
-
 func TestPlusMinus(t *testing.T) {
 	f := func(arr []int32) []string {
 		var p, n, z float64
@@ -879,22 +857,6 @@ func TestSimpleTextEditor(t *testing.T) {
 			t.Errorf("want=%v, got=%v", c.want, got)
 		}
 	}
-
-	// func main() {
-	// 	var q int
-	// 	fmt.Scan(&q)
-	// 	var sc = bufio.NewScanner(os.Stdin)
-	// 	var ops []string
-	// 	for i := 0; i < q; i++ {
-	// 		if sc.Scan() {
-	// 			ops = append(ops, sc.Text())
-	// 		}
-	// 	}
-	// 	out := f("", ops)
-	// 	for _, o := range out {
-	// 		fmt.Println(o)
-	// 	}
-	// }
 }
 
 type LegoBlocks struct {

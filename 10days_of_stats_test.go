@@ -93,20 +93,6 @@ func TestMeanMedianAndMode(t *testing.T) {
 			t.Errorf("want=%v, got=%v", c.want, got)
 		}
 	}
-
-	// var T int
-	// fmt.Scan(&T)
-	//
-	// input := make([]int32, 0 )
-	// for i := 0; i < T; i++ {
-	// 	var N int32
-	// 	fmt.Scan(&N)
-	// 	input = append(input, N)
-	// }
-	//
-	// for _, o := range f(input) {
-	// 	fmt.Println(o)
-	// }
 }
 
 func TestWeightedMean(t *testing.T) {
