@@ -7,6 +7,36 @@ import (
 	"testing"
 )
 
+func factorial(n int32) int32 {
+	if n < 2 {
+		return 1
+	}
+
+	return factorial(n-1) * n
+}
+
+func comb(n, r int32) int32 {
+	return factorial(n) / (factorial(r) * factorial(n-r))
+}
+
+func binomial(n int32, p float64, begin, end int32) float64 {
+	var a float64
+	for i := begin; i < end; i++ {
+		a = a + float64(comb(n, i))*math.Pow(p, float64(i))*math.Pow(1-p, float64(n-i))
+	}
+
+	return a
+}
+
+func poisson(m float64, x int32) float64 {
+	return math.Pow(m, float64(x)) * math.Exp(-m) / float64(factorial(x))
+}
+
+// The cumulative distribution function for a function with normal distribution
+func cdf(mean, stddev, x float64) float64 {
+	return 0.5 * (1.0 + math.Erf((x-mean)/(stddev*math.Sqrt2)))
+}
+
 func TestMeanMedianAndMode(t *testing.T) {
 	f := func(n []int32) []string {
 		var sum int32
@@ -359,20 +389,6 @@ func TestDrawingMarbles(t *testing.T) {
 	// 2/3
 }
 
-func comb(n, r int32) float64 {
-	a := factorial(n) / (factorial(r) * factorial(n-r))
-	return float64(a)
-}
-
-func binomial(n int32, p float64, begin, end int32) float64 {
-	var a float64
-	for i := begin; i < end; i++ {
-		a = a + comb(n, i)*math.Pow(p, float64(i))*math.Pow(1-p, float64(n-i))
-	}
-
-	return a
-}
-
 func TestBinomialDistribution1(t *testing.T) {
 	n := int32(6)
 	p := 1.09 / (1.09 + 1.0)
@@ -427,10 +443,6 @@ func TestGeometricDistribution2(t *testing.T) {
 	}
 }
 
-func poisson(m float64, x int32) float64 {
-	return math.Pow(m, float64(x)) * math.Exp(-m) / float64(factorial(x))
-}
-
 func TestPoissonDistribution1(t *testing.T) {
 	f := func(m float64, x int32) string {
 		return fmt.Sprintf("%.3f", poisson(m, x))
@@ -473,11 +485,6 @@ func TestPoissonDistribution2(t *testing.T) {
 			t.Errorf("want=%v, got=%v", want, got)
 		}
 	}
-}
-
-// The cumulative distribution function for a function with normal distribution
-func cdf(mean, stddev, x float64) float64 {
-	return 0.5 * (1.0 + math.Erf((x-mean)/(stddev*math.Sqrt2)))
 }
 
 func TestNormalDistribution1(t *testing.T) {

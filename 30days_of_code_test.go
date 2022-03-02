@@ -346,14 +346,6 @@ func TestDictionariesAndMaps(t *testing.T) {
 	}
 }
 
-func factorial(n int32) int32 {
-	if n < 2 {
-		return 1
-	}
-
-	return factorial(n-1) * n
-}
-
 func TestRecursion3(t *testing.T) {
 	cases := []struct {
 		in   int32
