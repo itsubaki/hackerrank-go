@@ -476,8 +476,8 @@ func TestPoissonDistribution2(t *testing.T) {
 }
 
 // The cumulative distribution function for a function with normal distribution
-func cdf(m, s, x float64) float64 {
-	return 0.5 * (1.0 + math.Erf((x-m)/(s*math.Sqrt2)))
+func cdf(mean, stddev, x float64) float64 {
+	return 0.5 * (1.0 + math.Erf((x-mean)/(stddev*math.Sqrt2)))
 }
 
 func TestNormalDistribution1(t *testing.T) {
@@ -514,6 +514,77 @@ func TestNormalDistribution2(t *testing.T) {
 	for i := range got {
 		if got[i] != want[i] {
 			t.Errorf("want=%v, got=%v", want, got)
+		}
+	}
+}
+
+func TestTheCentralLimitTheorem1(t *testing.T) {
+	f := func(x, n, mean, stddev float64) float64 {
+		return cdf(mean, stddev/math.Sqrt(n), x/n)
+	}
+
+	cases := []struct {
+		x, n, mean, stddev float64
+		want               float64
+	}{
+		{9800, 49, 205, 15, 0.00981532862864537},
+	}
+
+	for _, c := range cases {
+		got := f(c.x, c.n, c.mean, c.stddev)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestTheCentralLimitTheorem2(t *testing.T) {
+	f := func(x, n, mu, sigma float64) float64 {
+		return cdf(n*mu, sigma*math.Sqrt(n), x)
+	}
+
+	cases := []struct {
+		x, n, mu, sigma float64
+		want            float64
+	}{
+		{250, 100, 2.4, 2.0, 0.6914624612740131},
+	}
+
+	for _, c := range cases {
+		got := f(c.x, c.n, c.mu, c.sigma)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
+
+func TestTheCentralLimitTheorem3(t *testing.T) {
+	f := func(n, mean, std, interval, z float64) []float64 {
+		return []float64{
+			mean - (std/math.Sqrt(n))*z,
+			mean + (std/math.Sqrt(n))*z,
+		}
+	}
+
+	cases := []struct {
+		n, mean, std, interval, z float64
+		want                      []float64
+	}{
+		{100, 500, 80, 0.95, 1.96, []float64{484.32, 515.68}},
+	}
+
+	for _, c := range cases {
+		got := f(c.n, c.mean, c.std, c.interval, c.z)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
 		}
 	}
 }
