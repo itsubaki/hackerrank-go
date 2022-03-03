@@ -632,3 +632,64 @@ func TestPearsonCorrelationCoefficient1(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestSpearmansRankCorrelationCoefficient(t *testing.T) {
+	rank := func(n int, arr []float64) []int {
+		type pair struct {
+			index int
+			value float64
+		}
+
+		var p []pair
+		for i := 0; i < n; i++ {
+			p = append(p, pair{
+				index: i,
+				value: arr[i],
+			})
+		}
+		sort.Slice(p, func(i, j int) bool { return p[i].value < p[j].value })
+
+		rnk := 1
+		out := make([]int, n)
+		for _, e := range p {
+			rnk++
+			out[e.index] = rnk
+		}
+
+		return out
+	}
+
+	f := func(n int, x, y []float64) float64 {
+		rx := rank(n, x)
+		ry := rank(n, y)
+
+		var d int
+		for i := 0; i < n; i++ {
+			d = d + (rx[i]-ry[i])*(rx[i]-ry[i])
+		}
+
+		return 1.0 - (6.0 * float64(d) / float64(n*(n*n-1)))
+	}
+
+	cases := []struct {
+		n    int
+		x, y []float64
+		want float64
+	}{
+		{
+			10,
+			[]float64{10, 9.8, 8, 7.8, 7.7, 1.7, 6, 5, 1.4, 2},
+			[]float64{200, 44, 32, 24, 22, 17, 15, 12, 8, 4},
+			0.9030303030303031,
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.n, c.x, c.y)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
