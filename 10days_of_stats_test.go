@@ -581,3 +581,54 @@ func TestTheCentralLimitTheorem3(t *testing.T) {
 		}
 	}
 }
+
+func TestPearsonCorrelationCoefficient1(t *testing.T) {
+	f := func(n int, x, y []float64) float64 {
+		var xsum, ysum float64
+		for i := 0; i < n; i++ {
+			xsum = xsum + x[i]
+			ysum = ysum + y[i]
+		}
+
+		mx := xsum / float64(n)
+		my := ysum / float64(n)
+
+		var mxsum, mysum float64
+		for i := 0; i < n; i++ {
+			mxsum = mxsum + math.Pow(x[i]-mx, 2.0)
+			mysum = mysum + math.Pow(y[i]-my, 2.0)
+		}
+
+		stdx := math.Sqrt(mxsum / float64(n))
+		stdy := math.Sqrt(mysum / float64(n))
+
+		var cov float64
+		for i := 0; i < n; i++ {
+			cov = cov + (x[i]-mx)*(y[i]-my)
+		}
+
+		return cov / (float64(n) * stdx * stdy)
+	}
+
+	cases := []struct {
+		n    int
+		x, y []float64
+		want float64
+	}{
+		{
+			10,
+			[]float64{10, 9.8, 8, 7.8, 7.7, 7, 6, 5, 4, 2},
+			[]float64{200, 44, 32, 24, 22, 17, 15, 12, 8, 4},
+			0.6124721937208479,
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.n, c.x, c.y)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
