@@ -590,21 +590,21 @@ func TestPearsonCorrelationCoefficient1(t *testing.T) {
 			ysum = ysum + y[i]
 		}
 
-		mx := xsum / float64(n)
-		my := ysum / float64(n)
+		xmean := xsum / float64(n)
+		ymean := ysum / float64(n)
 
-		var mxsum, mysum float64
+		var xm2sum, ym2sum float64
 		for i := 0; i < n; i++ {
-			mxsum = mxsum + math.Pow(x[i]-mx, 2.0)
-			mysum = mysum + math.Pow(y[i]-my, 2.0)
+			xm2sum = xm2sum + math.Pow(x[i]-xmean, 2.0)
+			ym2sum = ym2sum + math.Pow(y[i]-ymean, 2.0)
 		}
 
-		stdx := math.Sqrt(mxsum / float64(n))
-		stdy := math.Sqrt(mysum / float64(n))
+		stdx := math.Sqrt(xm2sum / float64(n))
+		stdy := math.Sqrt(ym2sum / float64(n))
 
 		var cov float64
 		for i := 0; i < n; i++ {
-			cov = cov + (x[i]-mx)*(y[i]-my)
+			cov = cov + (x[i]-xmean)*(y[i]-ymean)
 		}
 
 		return cov / (float64(n) * stdx * stdy)
