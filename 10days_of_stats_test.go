@@ -693,3 +693,44 @@ func TestSpearmansRankCorrelationCoefficient(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestLeastSquareRegressionLine(t *testing.T) {
+	f := func(n int, x, y []int, in int) float64 {
+		var xsum, ysum, x2sum, xyprd int
+		for i := 0; i < n; i++ {
+			xsum = xsum + x[i]
+			ysum = ysum + y[i]
+			x2sum = x2sum + (x[i] * x[i])
+			xyprd = xyprd + (x[i] * y[i])
+		}
+
+		xmean := float64(xsum) / float64(n)
+		ymean := float64(ysum) / float64(n)
+
+		b := float64(n*xyprd-xsum*ysum) / float64(n*x2sum-xsum*xsum)
+		a := ymean - b*xmean
+
+		return a + b*float64(in)
+	}
+
+	cases := []struct {
+		n    int
+		x, y []int
+		in   int
+		want float64
+	}{
+		{
+			5, []int{95, 85, 80, 70, 60}, []int{85, 95, 70, 65, 70}, 80,
+			78.2876712328767,
+		},
+	}
+
+	for _, c := range cases {
+		got := f(c.n, c.x, c.y, c.in)
+		if got == c.want {
+			continue
+		}
+
+		t.Errorf("want=%v, got=%v", c.want, got)
+	}
+}
