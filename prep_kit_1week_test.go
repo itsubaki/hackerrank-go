@@ -13,7 +13,7 @@ import (
 )
 
 func TestPlusMinus(t *testing.T) {
-	f := func(arr []int32) []string {
+	f := func(arr []int32) (float64, float64, float64) {
 		var p, n, z float64
 		for i := range arr {
 			if arr[i] > 0 {
@@ -24,34 +24,31 @@ func TestPlusMinus(t *testing.T) {
 				z++
 			}
 		}
+
 		s := float64(len(arr))
-
-		out := make([]string, 0)
-		out = append(out, fmt.Sprintf("%.6f", p/s))
-		out = append(out, fmt.Sprintf("%.6f", n/s))
-		out = append(out, fmt.Sprintf("%.6f", z/s))
-
-		return out
+		return p / s, n / s, z / s
 	}
 
 	cases := []struct {
-		in   []int32
-		want []string
+		in      []int32
+		p, n, z float64
 	}{
 		{
 			[]int32{1, 1, 0, -1, -1},
-			[]string{"0.400000", "0.400000", "0.200000"},
+			0.400000, 0.400000, 0.200000,
 		},
 	}
 
 	for _, c := range cases {
-		got := f(c.in)
-		for i := range got {
-			if got[i] == c.want[i] {
-				continue
-			}
-
-			t.Errorf("want=%v, got=%v", c.want, got)
+		p, n, z := f(c.in)
+		if p != c.p {
+			t.Errorf("want=%v, got=%v", c.p, p)
+		}
+		if n != c.n {
+			t.Errorf("want=%v, got=%v", c.n, n)
+		}
+		if z != c.z {
+			t.Errorf("want=%v, got=%v", c.z, z)
 		}
 	}
 }

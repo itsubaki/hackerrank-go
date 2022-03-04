@@ -38,11 +38,12 @@ func cdf(mean, stddev, x float64) float64 {
 }
 
 func TestMeanMedianAndMode(t *testing.T) {
-	f := func(n []int32) []string {
+	f := func(n []int32) (float64, float64, int32) {
 		var sum int32
 		for i := range n {
 			sum = sum + n[i]
 		}
+		mean := float64(sum) / float64(len(n))
 
 		sort.Slice(n, func(i, j int) bool { return n[i] < n[j] })
 		median := float64(n[len(n)/2])
@@ -66,31 +67,30 @@ func TestMeanMedianAndMode(t *testing.T) {
 			}
 		}
 
-		return []string{
-			fmt.Sprintf("%.1f", float64(sum)/float64(len(n))),
-			fmt.Sprintf("%.1f", median),
-			fmt.Sprintf("%v", mode),
-		}
+		return mean, median, mode
 	}
 
 	cases := []struct {
-		in   []int32
-		want []string
+		in           []int32
+		mean, median float64
+		mode         int32
 	}{
 		{
 			[]int32{64630, 11735, 14216, 99233, 14470, 4978, 73429, 38120, 51135, 67060},
-			[]string{"43900.6", "44627.5", "4978"},
+			43900.6, 44627.5, 4978,
 		},
 	}
 
 	for _, c := range cases {
-		got := f(c.in)
-		for i := range got {
-			if got[i] == c.want[i] {
-				continue
-			}
-
-			t.Errorf("want=%v, got=%v", c.want, got)
+		mean, median, mode := f(c.in)
+		if mean != c.mean {
+			t.Errorf("want=%v, got=%v", c.mean, mean)
+		}
+		if median != c.median {
+			t.Errorf("want=%v, got=%v", c.median, median)
+		}
+		if mode != c.mode {
+			t.Errorf("want=%v, got=%v", c.mode, mode)
 		}
 	}
 }
