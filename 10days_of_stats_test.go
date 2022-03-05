@@ -736,46 +736,6 @@ func TestLeastSquareRegressionLine(t *testing.T) {
 }
 
 func TestMultipleLinearRegression(t *testing.T) {
-	// var sc = bufio.NewScanner(os.Stdin)
-	//
-	// sc.Scan()
-	// mn := strings.Split(sc.Text(), " ")
-	// m, _ := strconv.ParseInt(mn[0], 10, 64)
-	// n, _ := strconv.ParseInt(mn[1], 10, 64)
-	// fmt.Printf("%v %v\n", m, n)
-	//
-	// input := make([][]float64, 0)
-	// for i := int64(0); i < n; i++ {
-	// 	sc.Scan()
-	// 	row := make([]float64, 0)
-	// 	for _, e := range strings.Split(sc.Text(), " ") {
-	// 		v, _ := strconv.ParseFloat(e, 64)
-	// 		row = append(row, v)
-	// 	}
-	// 	input = append(input, row)
-	// }
-	// for _, r := range input {
-	// 	fmt.Printf("%v\n", r)
-	// }
-	//
-	// sc.Scan()
-	// qn, _ := strconv.ParseInt(sc.Text(), 10, 64)
-	// fmt.Printf("%v\n", qn)
-	//
-	// q := make([][]float64, 0)
-	// for i := int64(0); i < qn; i++ {
-	// 	sc.Scan()
-	// 	row := make([]float64, 0)
-	// 	for _, e := range strings.Split(sc.Text(), " ") {
-	// 		v, _ := strconv.ParseFloat(e, 64)
-	// 		row = append(row, v)
-	// 	}
-	// 	q = append(q, row)
-	// }
-	// for _, r := range q {
-	// 	fmt.Printf("%v\n", r)
-	// }
-
 	transpose := func(m [][]float64) [][]float64 {
 		out := make([][]float64, 0)
 		for i := 0; i < len(m[i]); i++ {
@@ -857,7 +817,7 @@ func TestMultipleLinearRegression(t *testing.T) {
 		return out
 	}
 
-	B := func(input [][]float64) []float64 {
+	XY := func(input [][]float64) ([][]float64, []float64) {
 		X, Y := make([][]float64, 0), make([]float64, 0)
 		for i := 0; i < len(input); i++ {
 			row := []float64{1.0}
@@ -871,11 +831,13 @@ func TestMultipleLinearRegression(t *testing.T) {
 			X = append(X, row)
 		}
 
-		Xinv := dot(transpose(X), inverse(dot(X, transpose(X))))
-		return apply(Y, Xinv)
+		return X, Y
 	}
 
-	f := func(B []float64, q [][]float64) []float64 {
+	f := func(input, q [][]float64) []float64 {
+		X, Y := XY(input)
+		Xinv := dot(transpose(X), inverse(dot(X, transpose(X))))
+		B := apply(Y, Xinv)
 		return apply(B, q)
 	}
 
@@ -922,7 +884,7 @@ func TestMultipleLinearRegression(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		got := f(B(c.in), c.q)
+		got := f(c.in, c.q)
 		for i := range got {
 			if got[i] == c.want[i] {
 				continue
@@ -931,4 +893,38 @@ func TestMultipleLinearRegression(t *testing.T) {
 			t.Errorf("want=%v, got=%v", c.want, got)
 		}
 	}
+
+	// var sc = bufio.NewScanner(os.Stdin)
+	// sc.Scan()
+	// mn := strings.Split(sc.Text(), " ")
+	// n, _ := strconv.ParseInt(mn[1], 10, 64)
+	//
+	// input := make([][]float64, 0)
+	// for i := int64(0); i < n; i++ {
+	// 	sc.Scan()
+	// 	row := make([]float64, 0)
+	// 	for _, e := range strings.Split(sc.Text(), " ") {
+	// 		v, _ := strconv.ParseFloat(e, 64)
+	// 		row = append(row, v)
+	// 	}
+	// 	input = append(input, row)
+	// }
+	//
+	// sc.Scan()
+	// qn, _ := strconv.ParseInt(sc.Text(), 10, 64)
+	//
+	// q := make([][]float64, 0)
+	// for i := int64(0); i < qn; i++ {
+	// 	sc.Scan()
+	// 	row := []float64{1.0}
+	// 	for _, e := range strings.Split(sc.Text(), " ") {
+	// 		v, _ := strconv.ParseFloat(e, 64)
+	// 		row = append(row, v)
+	// 	}
+	// 	q = append(q, row)
+	// }
+	//
+	// for _, e := range f(input, q) {
+	// 	fmt.Printf("%.2f\n", e)
+	// }
 }
