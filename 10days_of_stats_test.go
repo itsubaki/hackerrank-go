@@ -734,3 +734,178 @@ func TestLeastSquareRegressionLine(t *testing.T) {
 		t.Errorf("want=%v, got=%v", c.want, got)
 	}
 }
+
+func TestMultipleLinearRegression(t *testing.T) {
+	// var sc = bufio.NewScanner(os.Stdin)
+	//
+	// sc.Scan()
+	// mn := strings.Split(sc.Text(), " ")
+	// m, _ := strconv.ParseInt(mn[0], 10, 64)
+	// n, _ := strconv.ParseInt(mn[1], 10, 64)
+	// fmt.Printf("%v %v\n", m, n)
+	//
+	// input := make([][]float64, 0)
+	// for i := int64(0); i < n; i++ {
+	// 	sc.Scan()
+	// 	row := make([]float64, 0)
+	// 	for _, e := range strings.Split(sc.Text(), " ") {
+	// 		v, _ := strconv.ParseFloat(e, 64)
+	// 		row = append(row, v)
+	// 	}
+	// 	input = append(input, row)
+	// }
+	// for _, r := range input {
+	// 	fmt.Printf("%v\n", r)
+	// }
+	//
+	// sc.Scan()
+	// qn, _ := strconv.ParseInt(sc.Text(), 10, 64)
+	// fmt.Printf("%v\n", qn)
+	//
+	// q := make([][]float64, 0)
+	// for i := int64(0); i < qn; i++ {
+	// 	sc.Scan()
+	// 	row := make([]float64, 0)
+	// 	for _, e := range strings.Split(sc.Text(), " ") {
+	// 		v, _ := strconv.ParseFloat(e, 64)
+	// 		row = append(row, v)
+	// 	}
+	// 	q = append(q, row)
+	// }
+	// for _, r := range q {
+	// 	fmt.Printf("%v\n", r)
+	// }
+
+	transpose := func(m [][]float64) [][]float64 {
+		out := make([][]float64, 0)
+		for i := 0; i < len(m[i]); i++ {
+			v := make([]float64, 0)
+			for j := 0; j < len(m); j++ {
+				v = append(v, m[j][i])
+			}
+
+			out = append(out, v)
+		}
+
+		return out
+	}
+
+	inverse := func(m [][]float64) [][]float64 {
+		out := make([][]float64, 0)
+		for i := 0; i < len(m); i++ {
+			v := make([]float64, 0)
+			for j := 0; j < len(m[i]); j++ {
+				if i == j {
+					v = append(v, 1)
+					continue
+				}
+				v = append(v, 0)
+			}
+			out = append(out, v)
+		}
+
+		for i := 0; i < len(m); i++ {
+			c := 1 / m[i][i]
+			for j := 0; j < len(m[i]); j++ {
+				m[i][j] = c * m[i][j]
+				out[i][j] = c * out[i][j]
+			}
+			for j := 0; j < len(m[i]); j++ {
+				if i == j {
+					continue
+				}
+
+				c := m[j][i]
+				for k := 0; k < len(m[i]); k++ {
+					m[j][k] = m[j][k] - c*m[i][k]
+					out[j][k] = out[j][k] - c*out[i][k]
+				}
+			}
+		}
+
+		return out
+	}
+
+	dot := func(m, n [][]float64) [][]float64 {
+		out := make([][]float64, 0)
+		for i := 0; i < len(n); i++ {
+			v := make([]float64, 0)
+			for j := 0; j < len(m[i]); j++ {
+				var c float64
+				for k := 0; k < len(m); k++ {
+					c = c + n[i][k]*m[k][j]
+				}
+				v = append(v, c)
+			}
+
+			out = append(out, v)
+		}
+
+		return out
+	}
+
+	apply := func(v []float64, m [][]float64) []float64 {
+		out := make([]float64, 0)
+		for i := 0; i < len(m); i++ {
+			var tmp float64
+			for j := 0; j < len(m[i]); j++ {
+				tmp = tmp + v[j]*m[i][j]
+			}
+			out = append(out, tmp)
+		}
+
+		return out
+	}
+
+	B := func(input [][]float64) []float64 {
+		X, Y := make([][]float64, 0), make([]float64, 0)
+		for i := 0; i < len(input); i++ {
+			row := []float64{1.0}
+			for j := 0; j < len(input[i]); j++ {
+				if j == len(input[i])-1 {
+					Y = append(Y, input[i][j])
+					continue
+				}
+				row = append(row, input[i][j])
+			}
+			X = append(X, row)
+		}
+
+		Xinv := dot(transpose(X), inverse(dot(X, transpose(X))))
+		return apply(Y, Xinv)
+	}
+
+	f := func(B []float64, q [][]float64) []float64 {
+		return apply(B, q)
+	}
+
+	cases := []struct {
+		in, q [][]float64
+		want  []float64
+	}{
+		{
+			[][]float64{
+				{5, 7, 10},
+				{6, 6, 20},
+				{7, 4, 60},
+				{8, 5, 40},
+				{9, 6, 50},
+			},
+			[][]float64{
+				{1, 5, 5},
+			},
+			[]float64{29.395348837209703},
+		},
+	}
+
+	for _, c := range cases {
+		got := f(B(c.in), c.q)
+		for i := range got {
+			if got[i] == c.want[i] {
+				continue
+			}
+
+			t.Errorf("want=%v, got=%v", c.want, got)
+		}
+	}
+}
