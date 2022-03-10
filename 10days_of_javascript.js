@@ -29,6 +29,59 @@ function factorial(n) {
     return n * factorial(n - 1)
 }
 
+function letAndConst() {
+    const PI = Math.PI;
+    let r = readLine();
+    
+    console.log(PI*r*r);
+    console.log(PI*2*r);
+}
+
+function getGrade(score) {
+    if ( score <= 5 ) {
+        return 'F';
+    }
+    if ( score <= 10 ) {
+        return 'E';
+    }
+    if ( score <= 15 ) {
+        return 'D';
+    }
+    if ( score <= 20 ) {
+        return 'C';
+    }
+    if ( score <= 25 ) {
+        return 'B';
+    }
+
+    return 'A';
+}
+
+function getLetter(s) {
+    switch(s[0]) {
+        case 'a':
+        case 'e':
+        case 'i':
+        case 'o':
+        case 'u':
+            return 'A';
+        case 'b':
+        case 'c':
+        case 'd':
+        case 'f':
+        case 'g':
+            return 'B';
+        case 'h':
+        case 'j':
+        case 'k':
+        case 'l':
+        case 'm':
+            return 'C';
+        default:
+            return 'D';
+    }
+}
+
 function vowelsAndConsonants(s) {
     const vowels = 'aeiou';
     var consonants = '';
@@ -43,12 +96,4 @@ function vowelsAndConsonants(s) {
     }
     
     console.log(consonants);
-}
-
-function letAndConst() {
-    const PI = Math.PI;
-    let r = readLine();
-    
-    console.log(PI*r*r);
-    console.log(PI*2*r);
 }
