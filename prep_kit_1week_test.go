@@ -261,7 +261,7 @@ func TestDiagonalDifference(t *testing.T) {
 	}
 }
 
-func TestCountingSort(t *testing.T) {
+func TestCountingSort1(t *testing.T) {
 	f := func(arr []int32) []int32 {
 		out := make([]int32, 100)
 		for i := range arr {
