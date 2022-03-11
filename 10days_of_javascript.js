@@ -136,3 +136,84 @@ function isPositive(a) {
     
     throw new Error('Negative Error');
 }
+
+function Rectangle(a, b) {
+    return {
+        length: a,
+        width: b,
+        perimeter: 2 * (a + b),
+        area: a*b
+    }
+}
+
+function getCount(objects) {
+    return objects.filter(item => item.x === item.y).length;
+}
+
+class Polygon{
+    constructor(sides){        
+        this.sides = sides
+    }
+    
+    perimeter() {
+        return this.sides.reduce(function add(a, b){return a+b;})
+    } 
+}
+
+class Rectangle {
+    constructor(w, h) {
+        this.w = w;
+        this.h = h;
+    }
+}
+
+Rectangle.prototype.area = function () {
+    return this.w * this.h;
+}
+
+class Square extends Rectangle {
+    constructor(s) {
+        super(s, s)
+    }
+}
+
+function sides(literals, ...expressions) {
+    const [a, p] = expressions;
+    let s1 = (p + Math.sqrt(p*p -16 *a))/4;
+    let s2 = (p - Math.sqrt(p*p -16 *a))/4;
+    return [s1, s2].sort();
+}
+
+function modifyArray(nums) {
+    return nums.map(n => n = (n%2==0) ? n*2: n*3);
+}
+
+function getMaxLessThanK(n, k) {
+    let max = 0;
+    for (let b = n; b > 0; b--) {
+        for (let a = b-1; a > 0; a--) {
+            if ((a & b) < k && (a & b) > max){
+                max = (a&b);
+            }
+        }
+    }
+    
+    return max;
+}
+
+function getDayName(dateString) {
+    let dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return dayNames[new Date(dateString).getDay()];
+}
+
+function regexVar() {
+    return /^([aeiou]).+\1$/;
+}
+
+function regexVar() {
+    return /^(Mr|Mrs|Ms|Dr|Er)(\.)([a-zA-Z])*$/;
+}
+
+function regexVar() {
+    return /\d+/g;
+}
