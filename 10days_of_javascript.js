@@ -225,17 +225,6 @@ function regexVar() {
 //     font-size:24px;
 // }
 
-// js/button.js
-function counter() {
-    var button = document.getElementById("btn");
-    let count = 1;
-    
-    button.innerHTML = count;
-    button.addEventListener("click",()=>{
-        button.innerHTML = +(button.innerHTML)+1;
-    });
-}
-
 // index.html
 // <!-- Enter your HTML code here -->
 // <!DOCTYPE html>
@@ -249,6 +238,17 @@ function counter() {
 //         <button id='btn' onclick="counter()">0</button>
 //     </body>
 // </html>
+
+// js/button.js
+function counter() {
+    var button = document.getElementById("btn");
+    let count = 1;
+    
+    button.innerHTML = count;
+    button.addEventListener("click",()=>{
+        button.innerHTML = +(button.innerHTML)+1;
+    });
+}
 
 // css/buttonsGrid.css
 // #btns {
@@ -265,6 +265,24 @@ function counter() {
 //   font-size: 24px;
 // }
 
+// index.html
+// <!DOCTYPE html>
+// <html lang="en">
+//   <head>
+//     <meta charset="UTF-8" />
+//     <link rel="stylesheet" href="css/buttonsGrid.css" type="text/css" />
+//   </head>
+//   <body>
+//     <div id="btns">
+//       <button id="btn1">1</button> <button id="btn2">2</button> <button id="btn3">3</button>
+//       <button id="btn4">4</button> <button id="btn5">5</button> <button id="btn6">6</button>
+//       <button id="btn7">7</button> <button id="btn8">8</button> <button id="btn9">9</button>
+//     </div>
+//     <script src="js/buttonsGrid.js" type="text/javascript"></script>
+//   </body>
+// </html>
+
+// js/buttonsGrid.js
 window.onload = () => {
     const button5 = document.getElementById('btn5');
     button5.addEventListener('click', () => {
@@ -291,19 +309,109 @@ window.onload = () => {
     });
   };
 
+// css/binaryCalculator.css
+// body {
+//     width: 33%;
+// }
+// #res {
+//     background-color: lightgray;
+//     border: solid;
+//     height: 48px;
+//     font-size: 20px;
+// }
+// #btn0, #btn1 {
+//     background-color: lightgreen;
+//     color: brown;
+// }
+// #btnClr, #btnEql {
+//     background-color: darkgreen;
+//     color: white;
+// }
+// #btnSum, #btnSub, #btnMul, #btnDiv {
+//     background-color: black;
+//     color: red;
+// }
+// .btn {
+//     width: 25%;
+//     height: 36px;
+//     font-size: 18px;
+//     margin: 0px;
+//     float: left;
+// }
+
 // index.html
 // <!DOCTYPE html>
-// <html lang="en">
-//   <head>
-//     <meta charset="UTF-8" />
-//     <link rel="stylesheet" href="css/buttonsGrid.css" type="text/css" />
-//   </head>
-//   <body>
-//     <div id="btns">
-//       <button id="btn1">1</button> <button id="btn2">2</button> <button id="btn3">3</button>
-//       <button id="btn4">4</button> <button id="btn5">5</button> <button id="btn6">6</button>
-//       <button id="btn7">7</button> <button id="btn8">8</button> <button id="btn9">9</button>
-//     </div>
-//     <script src="js/buttonsGrid.js" type="text/javascript"></script>
-//   </body>
+// <html>
+//     <head>
+//         <meta charset="utf-8">
+//         <title>Binary Calculator</title>
+//         <link rel="stylesheet" href="css/binaryCalculator.css" type="text/css">
+//     </head>    
+//     <body>        
+//         <div id="res"></div>
+//         <div id="btns">
+//             <button id="btn0" class="btn" onclick="append('0')">0</button>
+//             <button id="btn1" class="btn" onclick="append('1')">1</button>
+//             <button id="btnClr" class="btn" onclick="clearRes()">C</button>
+//             <button id="btnEql" class="btn" onclick="equal()">=</button>
+//             <button id="btnSum" class="btn" onclick="assignOperator('+')">+</button>
+//             <button id="btnSub" class="btn" onclick="assignOperator('-')">-</button>
+//             <button id="btnMul" class="btn" onclick="assignOperator('*')">*</button>
+//             <button id="btnDiv" class="btn" onclick="assignOperator('/')">/</button>
+//         </div>
+//         <script src="js/binaryCalculator.js" type="text/javascript"></script>
+//     </body>
 // </html>
+
+// js/binaryCalculator.js
+const res = document.getElementById("res");
+let operand1 = operator = operand2 = '';
+
+function append(val) {
+    if(operator) {
+        operand2 += val;
+    } else {
+        operand1 += val;
+    }
+    renderResDiv();
+}
+
+function clearRes() {
+    operand1 = operator = operand2 = '';
+    renderResDiv();
+}
+
+function equal() {
+    operand1 = parseInt(operand1, 2);
+    operand2 = parseInt(operand2, 2);
+    switch(operator) {
+        case '+':
+            operand1 += operand2;
+            break;
+        case '-':
+            operand1 -= operand2;
+            break;
+        case '*':
+            operand1 *= operand2;
+            break;
+        case '/':
+            if(operand2)
+                operand1 /= operand2;
+            break;
+        default:
+            break;
+    }
+
+    operand1 = parseInt(operand1).toString(2);
+    operator = operand2 = '';  
+    renderResDiv();
+}
+
+function assignOperator(val) {
+    operator = val;
+    renderResDiv();
+}
+
+function renderResDiv() {
+    res.innerHTML = operand1 + operator + operand2;
+}
