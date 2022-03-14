@@ -217,3 +217,35 @@ function regexVar() {
 function regexVar() {
     return /\d+/g;
 }
+
+// CSS/button.css
+// #btn {
+//     width: 96px;
+//     height: 48px;
+//     font-size:24px;
+// }
+
+// js/button.js
+function counter() {
+    var button = document.getElementById("btn");
+    let count = 1;
+    
+    button.innerHTML = count;
+    button.addEventListener("click",()=>{
+        button.innerHTML = +(button.innerHTML)+1;
+    });
+}
+
+// index.html
+// <!-- Enter your HTML code here -->
+// <!DOCTYPE html>
+// <html>
+//     <head>
+//         <meta charset="utf-8">
+//         <title>Button</title>
+//     </head>
+//     <body>
+//         <script src="js/button.js" type="text/javascript"></script>
+//         <button id='btn' onclick="counter()">0</button>
+//     </body>
+// </html>
